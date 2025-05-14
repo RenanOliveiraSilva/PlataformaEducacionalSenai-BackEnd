@@ -29,10 +29,10 @@ public class SecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if(login != null){
-            Secretaria secretaria = secretariaRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Secretaria Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SECRETARIA"));
-            var authentication = new UsernamePasswordAuthenticationToken(secretaria, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            //Secretaria secretaria = secretariaRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Secretaria Not Found"));
+            //var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SECRETARIA"));
+            //var authentication = new UsernamePasswordAuthenticationToken(secretaria, null, authorities);
+            //SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
     }
