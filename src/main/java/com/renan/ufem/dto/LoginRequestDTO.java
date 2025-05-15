@@ -1,3 +1,3 @@
 package com.renan.ufem.dto;
 
-public record LoginRequestDTO(String email, String password) {}
+public record LoginRequestDTO(String email, String senha) {}

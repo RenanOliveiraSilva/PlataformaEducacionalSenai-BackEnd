@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Secretaria")
+@Table(name = "secretaria")
 @Setter
 @Getter
 @AllArgsConstructor
@@ -19,7 +19,7 @@ import lombok.Setter;
 public class Secretaria {
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+	private String id_secretaria;
 	private String nome;
 	private String email;
 	private String telefone;
