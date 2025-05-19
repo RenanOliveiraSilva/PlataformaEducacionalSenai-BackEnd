@@ -21,7 +21,12 @@ public class Secretaria {
 	@GeneratedValue(strategy = GenerationType.UUID)
 	private String id_secretaria;
 	private String nome;
+	private String logradouro;
+	private String bairro;
+	private int numero;
+	private String cidade;
+	private String UF;
 	private String email;
-	private String telefone;
 	private String senha;
+	private String telefone;
 }

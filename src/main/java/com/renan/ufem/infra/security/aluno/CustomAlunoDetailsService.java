@@ -1,7 +1,7 @@
-package com.renan.ufem.infra.security;
+package com.renan.ufem.infra.security.aluno;
 
-import com.renan.ufem.domain.secretaria.Secretaria;
-import com.renan.ufem.repositories.SecretariaRepository;
+import com.renan.ufem.domain.aluno.Aluno;
+import com.renan.ufem.repositories.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,23 +11,23 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 
 @Service
-public class CustomSecretariaDetailsService implements UserDetailsService {
+public class CustomAlunoDetailsService implements UserDetailsService {
 
-    private final SecretariaRepository repository;
+    private final AlunoRepository repository;
 
     @Autowired
-    public CustomSecretariaDetailsService(SecretariaRepository repository) {
+    public CustomAlunoDetailsService(AlunoRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Secretaria secretaria = this.repository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Secretaria not found"));
+        Aluno aluno = this.repository.findByCPF(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Aluno not found"));
 
         return new org.springframework.security.core.userdetails.User(
-                secretaria.getEmail(),
-                secretaria.getSenha(),
+                aluno.getEmail(),
+                aluno.getSenha(),
                 new ArrayList<>()
         );
     }

@@ -1,4 +1,4 @@
-package com.renan.ufem.controllers;
+package com.renan.ufem.controllers.secretaria;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
