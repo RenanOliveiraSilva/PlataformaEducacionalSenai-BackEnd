@@ -1,4 +1,4 @@
-package com.renan.ufem.infra.security;
+package com.renan.ufem.infra.security.secretaria;
 
 import com.renan.ufem.domain.secretaria.Secretaria;
 import com.renan.ufem.repositories.SecretariaRepository;
@@ -17,9 +17,9 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class SecurityFilter extends OncePerRequestFilter {
+public class SecretariaSecurityFilter extends OncePerRequestFilter {
     @Autowired
-    TokenService tokenService;
+    SecretariaTokenService tokenService;
     @Autowired
     SecretariaRepository secretariaRepository;
 
