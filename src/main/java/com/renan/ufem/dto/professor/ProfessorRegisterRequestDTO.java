@@ -16,6 +16,7 @@ public record ProfessorRegisterRequestDTO(
         String telefone,
         String matricula,
         String sexo,
-        Date data_nasc
+        Date data_nasc,
+        String id_secretatia
 ) {
 }

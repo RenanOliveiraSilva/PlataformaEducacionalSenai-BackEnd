@@ -28,7 +28,7 @@ public class SecretariaAuthController {
 
         if(passwordEncoder.matches(body.senha(), secretaria.getSenha())) {
             String token = this.tokenService.generateToken(secretaria);
-            return ResponseEntity.ok(new ResponseDTO(secretaria.getNome(), token));
+            return ResponseEntity.ok(new ResponseDTO(secretaria.getId_secretaria(), token));
         }
 
         return ResponseEntity.badRequest().build();
@@ -53,7 +53,7 @@ public class SecretariaAuthController {
             this.repository.save(newSecretaria);
 
             String token = this.tokenService.generateToken(newSecretaria);
-            return ResponseEntity.ok(new ResponseDTO(newSecretaria.getNome(), token));
+            return ResponseEntity.ok(new ResponseDTO(newSecretaria.getId_secretaria(), token));
         }
 
         return ResponseEntity.badRequest().build();

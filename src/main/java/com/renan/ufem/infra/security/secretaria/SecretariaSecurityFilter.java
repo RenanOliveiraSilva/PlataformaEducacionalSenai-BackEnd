@@ -25,6 +25,12 @@ public class SecretariaSecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // ✅ Verifica se a rota começa com /secretaria
+        if (!request.getRequestURI().startsWith("/secretaria")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         var token = this.recoverToken(request);
         var login = tokenService.validateToken(token);
 
