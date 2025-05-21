@@ -1,4 +1,4 @@
-package com.renan.ufem.infra.security.professor;
+package com.renan.ufem.infra.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,22 +14,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@Order(3)
-public class ProfessorSecurityConfig {
-    @Autowired
-    private CustomProfessorDetailsService userDetailsService;
+@Order(1)
+public class SecretariaSecurityConfig {
 
     @Autowired
-    ProfessorSecurityFilter securityFilter;
+    private CustomSecretariaDetailsService userDetailsService;
+
+    @Autowired
+    SecretariaSecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain professorSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain secretariaSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/professor/**")
+                .securityMatcher("/secretaria/**")
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/professor/auth/login", "/professor/auth/register").permitAll()
+                        .requestMatchers("/secretaria/auth/login", "/secretaria/auth/register").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
@@ -38,7 +39,7 @@ public class ProfessorSecurityConfig {
     }
 
     @Bean
-    public PasswordEncoder ProfessorPasswordEncoder() {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

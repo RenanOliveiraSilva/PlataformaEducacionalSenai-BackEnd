@@ -1,7 +1,7 @@
-package com.renan.ufem.infra.security.aluno;
+package com.renan.ufem.infra.security;
 
-import com.renan.ufem.domain.aluno.Aluno;
-import com.renan.ufem.repositories.AlunoRepository;
+import com.renan.ufem.domain.secretaria.Secretaria;
+import com.renan.ufem.repositories.SecretariaRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,16 +17,16 @@ import java.io.IOException;
 import java.util.Collections;
 
 @Component
-public class AlunoSecurityFilter extends OncePerRequestFilter {
+public class SecretariaSecurityFilter extends OncePerRequestFilter {
     @Autowired
-    AlunoTokenService tokenService;
+    SecretariaTokenService tokenService;
     @Autowired
-    AlunoRepository alunoRepository;
+    SecretariaRepository secretariaRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // ✅ Verifica se a rota começa com /aluno
-        if (!request.getRequestURI().startsWith("/aluno")) {
+        // ✅ Verifica se a rota começa com /secretaria
+        if (!request.getRequestURI().startsWith("/secretaria")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -35,9 +35,9 @@ public class AlunoSecurityFilter extends OncePerRequestFilter {
         var login = tokenService.validateToken(token);
 
         if(login != null){
-            Aluno aluno = alunoRepository.findByCPF(login).orElseThrow(() -> new RuntimeException("Aluno Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_ALUNO"));
-            var authentication = new UsernamePasswordAuthenticationToken(aluno, null, authorities);
+            Secretaria secretaria = secretariaRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Secretaria Not Found"));
+            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SECRETARIA"));
+            var authentication = new UsernamePasswordAuthenticationToken(secretaria, null, authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);

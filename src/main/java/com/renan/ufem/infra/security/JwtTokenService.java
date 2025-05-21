@@ -1,30 +1,31 @@
-package com.renan.ufem.infra.security.aluno;
+package com.renan.ufem.infra.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.renan.ufem.domain.aluno.Aluno;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.renan.ufem.domain.secretaria.Secretaria;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
 @Service
-public class AlunoTokenService {
+public class SecretariaTokenService {
 
     @Value("${api.security.token.secret}")
     private String secret;
 
-    public String generateToken(Aluno aluno){
+    public String generateToken(Secretaria secretaria){
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
             String token = JWT.create()
                     .withIssuer("ufem")
-                    .withSubject(aluno.getCPF())
+                    .withSubject(secretaria.getEmail())
                     .withExpiresAt(this.generateExpirationDate())
                     .sign(algorithm);
 

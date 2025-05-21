@@ -1,17 +1,22 @@
 package com.renan.ufem.controllers.secretaria;
 
-import com.renan.ufem.domain.aluno.Aluno;
-import com.renan.ufem.domain.professor.Professor;
+import com.renan.ufem.domain.Aluno;
+import com.renan.ufem.domain.Professor;
+import com.renan.ufem.domain.Secretaria;
 import com.renan.ufem.dto.ResponseDTO;
 import com.renan.ufem.dto.aluno.AlunoRegisterRequestDTO;
 import com.renan.ufem.dto.professor.ProfessorRegisterRequestDTO;
-import com.renan.ufem.infra.security.secretaria.SecretariaTokenService;
+import com.renan.ufem.dto.secretaria.SecretariaLoginRequestDTO;
+import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.AlunoRepository;
 import com.renan.ufem.repositories.ProfessorRepository;
+import com.renan.ufem.repositories.SecretariaRepository;
+import com.renan.ufem.services.SecretariaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +28,7 @@ import java.util.Optional;
 public class SecretariaController {
 
     @Autowired
-    private SecretariaTokenService tokenService;
+    private JwtTokenService tokenService;
     @Autowired
     private AlunoRepository alunoRepository;
     @Autowired
@@ -31,11 +36,15 @@ public class SecretariaController {
     @Autowired
     private ProfessorRepository professorRepository;
 
+    private final SecretariaService secretariaService;
+    private final SecretariaRepository secretariaRepository;
+
     @GetMapping("/")
     public ResponseEntity<String> getSecretaria() {
         return ResponseEntity.ok("sucesso!");
     }
 
+    @PreAuthorize("hasRole('SECRETARIA')")
     @PostMapping("/{id_secretaria}/criarProfessor")
     public ResponseEntity criarProfessor(
             @RequestBody ProfessorRegisterRequestDTO body,
@@ -93,5 +102,43 @@ public class SecretariaController {
         }
 
         return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity login(@RequestBody SecretariaLoginRequestDTO body){
+        Secretaria secretaria = this.secretariaRepository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(passwordEncoder.matches(body.senha(), secretaria.getSenha())) {
+            String token = this.tokenService.generateToken(secretaria);
+            return ResponseEntity.ok(new ResponseDTO(secretaria.getId_secretaria(), token));
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("/auth/register")
+    public ResponseEntity<?> criarSecretaria(@RequestBody Secretaria body) {
+        try {
+            Secretaria newSecretaria = secretariaService.criarSecretaria(body);
+            String token = this.tokenService.generateToken(newSecretaria);
+            return ResponseEntity.ok(new ResponseDTO(newSecretaria.getId_secretaria(), token));
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    public Secretaria converterDTO(Secretaria dto) {
+        Secretaria secretaria = new Secretaria();
+        secretaria.setNome(dto.getNome());
+        secretaria.setEmail(dto.getEmail());
+        secretaria.setSenha(dto.getSenha());
+        secretaria.setTelefone(dto.getTelefone());
+        secretaria.setUF(dto.getUF());
+        secretaria.setCidade(dto.getCidade());
+        secretaria.setBairro(dto.getBairro());
+        secretaria.setLogradouro(dto.getLogradouro());
+        secretaria.setNumero(dto.getNumero());
+
+        return secretaria;
     }
 }
