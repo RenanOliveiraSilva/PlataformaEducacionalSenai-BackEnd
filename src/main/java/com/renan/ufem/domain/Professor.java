@@ -1,7 +1,5 @@
-package com.renan.ufem.domain.professor;
+package com.renan.ufem.domain;
 
-import com.renan.ufem.domain.pessoa.Pessoa;
-import com.renan.ufem.repositories.UsuarioAutenticavel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,9 @@
 package com.renan.ufem.infra.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -14,28 +14,32 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@Order(1)
-public class SecretariaSecurityConfig {
+@EnableMethodSecurity(prePostEnabled = true)
+public class SecurityConfig {
 
-    @Autowired
-    private CustomSecretariaDetailsService userDetailsService;
+    private final JwtSecurityFilter jwtSecurityFilter;
 
-    @Autowired
-    SecretariaSecurityFilter securityFilter;
+    public SecurityConfig(JwtSecurityFilter jwtSecurityFilter) {
+        this.jwtSecurityFilter = jwtSecurityFilter;
+    }
 
     @Bean
-    public SecurityFilterChain secretariaSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .securityMatcher("/secretaria/**")
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/secretaria/auth/login", "/secretaria/auth/register").permitAll()
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/aluno/auth/**",
+                                "/professor/auth/**",
+                                "/secretaria/auth/**",
+                                "/swagger-ui/**",
+                                "/v3/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+                .addFilterBefore(jwtSecurityFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean

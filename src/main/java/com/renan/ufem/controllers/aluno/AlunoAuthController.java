@@ -1,9 +1,10 @@
 package com.renan.ufem.controllers.aluno;
 
-import com.renan.ufem.domain.aluno.Aluno;
+import com.renan.ufem.domain.Aluno;
+
 import com.renan.ufem.dto.ResponseDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
-import com.renan.ufem.infra.security.aluno.AlunoTokenService;
+import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.AlunoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class AlunoAuthController {
 
     private final AlunoRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final AlunoTokenService tokenService;
+    private final JwtTokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AlunoLoginRequestDTO body){
@@ -26,7 +27,7 @@ public class AlunoAuthController {
 
         if(passwordEncoder.matches(body.senha(), aluno.getSenha())) {
             String token = this.tokenService.generateToken(aluno);
-            return ResponseEntity.ok(new ResponseDTO(aluno.getNome(), token));
+            return ResponseEntity.ok(new ResponseDTO(aluno.getId_aluno(), token));
         }
 
         return ResponseEntity.badRequest().build();

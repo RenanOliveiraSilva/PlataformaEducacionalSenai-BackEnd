@@ -1,6 +1,5 @@
 package com.renan.ufem.infra.security;
 
-import com.renan.ufem.infra.security.common.UsuarioAutenticavel;
 import com.renan.ufem.repositories.AlunoRepository;
 import com.renan.ufem.repositories.ProfessorRepository;
 import com.renan.ufem.repositories.SecretariaRepository;
@@ -29,4 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+        return alunoRepository.findByCPF(login)
+                .map(user -> (UserDetails) user)
+                .or(() -> professorRepository.findByCPF(login).map(user -> (UserDetails) user))
+                .or(() -> secretariaRepository.findByEmail(login).map(user -> (UserDetails) user))
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    }
+}

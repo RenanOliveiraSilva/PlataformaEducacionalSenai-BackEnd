@@ -1,4 +1,4 @@
-package com.renan.ufem.domain.pessoa;
+package com.renan.ufem.domain;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.AllArgsConstructor;

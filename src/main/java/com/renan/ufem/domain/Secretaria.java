@@ -1,5 +1,4 @@
-package com.renan.ufem.domain.secretaria;
-import com.renan.ufem.repositories.UsuarioAutenticavel;
+package com.renan.ufem.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;

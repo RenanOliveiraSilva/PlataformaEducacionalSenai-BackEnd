@@ -1,4 +1,4 @@
-package com.renan.ufem.controllers.secretaria;
+package com.renan.ufem.controllers;
 
 import com.renan.ufem.domain.Aluno;
 import com.renan.ufem.domain.Professor;
@@ -105,15 +105,16 @@ public class SecretariaController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity login(@RequestBody SecretariaLoginRequestDTO body){
-        Secretaria secretaria = this.secretariaRepository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("User not found"));
-
-        if(passwordEncoder.matches(body.senha(), secretaria.getSenha())) {
+    public ResponseEntity login(@RequestBody Secretaria body){
+        try {
+            Secretaria secretaria = secretariaService.loginSecretaria(body);
             String token = this.tokenService.generateToken(secretaria);
             return ResponseEntity.ok(new ResponseDTO(secretaria.getId_secretaria(), token));
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/auth/register")
@@ -141,4 +142,5 @@ public class SecretariaController {
 
         return secretaria;
     }
+
 }

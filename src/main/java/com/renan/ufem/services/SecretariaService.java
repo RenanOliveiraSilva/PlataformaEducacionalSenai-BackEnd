@@ -1,4 +1,8 @@
 package com.renan.ufem.services;
 
-public class SecretariaService {
+import com.renan.ufem.domain.Secretaria;
+
+public interface SecretariaService {
+    Secretaria criarSecretaria(Secretaria secretaria);
+    Secretaria loginSecretaria(Secretaria secretaria);
 }

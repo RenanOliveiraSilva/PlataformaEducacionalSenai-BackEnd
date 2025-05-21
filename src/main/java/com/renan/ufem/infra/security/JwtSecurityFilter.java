@@ -1,51 +1,47 @@
 package com.renan.ufem.infra.security;
 
-import com.renan.ufem.domain.secretaria.Secretaria;
-import com.renan.ufem.repositories.SecretariaRepository;
+import com.renan.ufem.domain.UsuarioAutenticavel;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 
 @Component
-public class SecretariaSecurityFilter extends OncePerRequestFilter {
-    @Autowired
-    SecretariaTokenService tokenService;
-    @Autowired
-    SecretariaRepository secretariaRepository;
+public class JwtSecurityFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // ✅ Verifica se a rota começa com /secretaria
-        if (!request.getRequestURI().startsWith("/secretaria")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    private final JwtTokenService tokenService;
+    private final CustomUserDetailsService userDetailsService;
 
-        var token = this.recoverToken(request);
-        var login = tokenService.validateToken(token);
-
-        if(login != null){
-            Secretaria secretaria = secretariaRepository.findByEmail(login).orElseThrow(() -> new RuntimeException("Secretaria Not Found"));
-            var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_SECRETARIA"));
-            var authentication = new UsernamePasswordAuthenticationToken(secretaria, null, authorities);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        filterChain.doFilter(request, response);
+    public JwtSecurityFilter(JwtTokenService tokenService, CustomUserDetailsService userDetailsService) {
+        this.tokenService = tokenService;
+        this.userDetailsService = userDetailsService;
     }
 
-    private String recoverToken(HttpServletRequest request){
-        var authHeader = request.getHeader("Authorization");
-        if(authHeader == null) return null;
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws ServletException, IOException {
+
+        String token = recuperarToken(request);
+        if (token != null) {
+            String login = tokenService.validateToken(token);
+            if (login != null) {
+                UsuarioAutenticavel usuario = (UsuarioAutenticavel) userDetailsService.loadUserByUsername(login);
+                var auth = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(auth);
+            }
+        }
+        chain.doFilter(request, response);
+    }
+
+    private String recuperarToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) return null;
         return authHeader.replace("Bearer ", "");
     }
 }
