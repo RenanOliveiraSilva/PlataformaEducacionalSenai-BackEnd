@@ -1,6 +1,6 @@
 package com.renan.ufem.repositories;
 
-import com.renan.ufem.domain.secretaria.Secretaria;
+import com.renan.ufem.domain.Secretaria;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

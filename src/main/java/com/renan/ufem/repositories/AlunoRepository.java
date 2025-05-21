@@ -1,6 +1,6 @@
 package com.renan.ufem.repositories;
 
-import com.renan.ufem.domain.aluno.Aluno;
+import com.renan.ufem.domain.Aluno;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
