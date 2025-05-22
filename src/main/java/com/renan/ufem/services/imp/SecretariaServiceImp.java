@@ -45,10 +45,10 @@ public class SecretariaServiceImp implements SecretariaService {
     }
 
     @Override
-    public Secretaria loginSecretaria(Secretaria dto){
-        Secretaria secretaria = this.repository.findByEmail(dto.getEmail()).orElseThrow(() -> new RuntimeException("Login inválido."));
+    public Secretaria loginSecretaria(SecretariaLoginRequestDTO dto){
+        Secretaria secretaria = this.repository.findByEmail(dto.email()).orElseThrow(() -> new RuntimeException("Login inválido."));
 
-        if(passwordEncoder.matches(dto.getSenha(), secretaria.getSenha())) {
+        if(passwordEncoder.matches(dto.senha(), secretaria.getSenha())) {
             return secretaria;
 
         }

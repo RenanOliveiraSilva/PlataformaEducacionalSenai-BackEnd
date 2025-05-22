@@ -11,6 +11,7 @@ import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.AlunoRepository;
 import com.renan.ufem.repositories.ProfessorRepository;
 import com.renan.ufem.repositories.SecretariaRepository;
+import com.renan.ufem.services.ProfessorService;
 import com.renan.ufem.services.SecretariaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class SecretariaController {
 
     private final SecretariaService secretariaService;
     private final SecretariaRepository secretariaRepository;
+    private final ProfessorService professorService;
 
     @GetMapping("/")
     public ResponseEntity<String> getSecretaria() {
@@ -50,29 +52,13 @@ public class SecretariaController {
             @RequestBody ProfessorRegisterRequestDTO body,
             @PathVariable String id_secretaria
     ){
-        Optional<Professor> professor = this.professorRepository.findByCPF(body.CPF());
-
-        if (professor.isEmpty()) {
-            Professor newProfessor = new Professor();
-            newProfessor.setSenha(passwordEncoder.encode(body.senha()));
-            newProfessor.setEmail(body.email());
-            newProfessor.setNome(body.nome());
-            newProfessor.setCPF(body.CPF());
-            newProfessor.setTelefone(body.telefone());
-            newProfessor.setLogradouro(body.logradouro());
-            newProfessor.setBairro(body.bairro());
-            newProfessor.setNumero(body.numero());
-            newProfessor.setCidade(body.cidade());
-            newProfessor.setUF(body.UF());
-            newProfessor.setSexo(body.sexo());
-            newProfessor.setData_nasc(body.data_nasc());
-            newProfessor.setId_secretaria(id_secretaria);
-
-            this.professorRepository.save(newProfessor);
-            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+        try {
+            // Delega a lógica para o ProfessorService
+            professorService.criarProfessor(body, id_secretaria);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/{id_secretaria}/register")
@@ -105,7 +91,7 @@ public class SecretariaController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity login(@RequestBody Secretaria body){
+    public ResponseEntity login(@RequestBody SecretariaLoginRequestDTO body){
         try {
             Secretaria secretaria = secretariaService.loginSecretaria(body);
             String token = this.tokenService.generateToken(secretaria);
