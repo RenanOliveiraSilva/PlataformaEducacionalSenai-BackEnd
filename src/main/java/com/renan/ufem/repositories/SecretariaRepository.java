@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface SecretariaRepository extends JpaRepository<Secretaria, String> {
 
     Optional<Secretaria> findByEmail(String email);
+    Optional<Secretaria> findById(String id);
 }

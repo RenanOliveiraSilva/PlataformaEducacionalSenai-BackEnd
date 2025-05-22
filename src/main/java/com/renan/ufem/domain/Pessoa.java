@@ -1,16 +1,12 @@
 package com.renan.ufem.domain;
 
 import jakarta.persistence.MappedSuperclass;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @MappedSuperclass
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public abstract class Pessoa {
     private String nome;
     private String CPF;

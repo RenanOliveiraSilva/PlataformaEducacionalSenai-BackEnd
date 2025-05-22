@@ -1,11 +1,13 @@
 package com.renan.ufem.dto.professor;
 
+import com.renan.ufem.enums.SituacaoType;
+
 import java.util.Date;
 
 public record ProfessorRegisterRequestDTO(
         String nome,
         String CPF,
-        String situacao,
+        SituacaoType situacao,
         String logradouro,
         String bairro,
         int numero,

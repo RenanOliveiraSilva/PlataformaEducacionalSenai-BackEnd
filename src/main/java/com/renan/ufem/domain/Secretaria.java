@@ -10,8 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "secretaria")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Secretaria implements UsuarioAutenticavel {
 
 	@Id

@@ -1,7 +1,9 @@
 package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.Professor;
+import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
 import com.renan.ufem.dto.professor.ProfessorRegisterRequestDTO;
+import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.repositories.ProfessorRepository;
 import com.renan.ufem.services.ProfessorService;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +39,19 @@ public class ProfessorServiceImp implements ProfessorService {
         newProfessor.setUF(dto.UF());
         newProfessor.setSexo(dto.sexo());
         newProfessor.setData_nasc(dto.data_nasc());
+        newProfessor.setSituacao(SituacaoType.ATIVO);
         newProfessor.setId_secretaria(idSecretaria);
 
         return this.repository.save(newProfessor);
+    }
+
+    public Professor loginProfessor(ProfessorLoginRequestDTO body){
+        Professor professor = this.repository.findByCPF(body.CPF()).orElseThrow(() -> new RuntimeException("Login inválido."));
+
+        if (passwordEncoder.matches(body.senha(), professor.getSenha())){
+            return professor;
+        };
+
+        throw new RuntimeException("Login inválido.");
     }
 }
