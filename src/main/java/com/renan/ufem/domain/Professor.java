@@ -1,27 +1,28 @@
 package com.renan.ufem.domain;
 
+import com.renan.ufem.enums.SituacaoType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "professor")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Professor extends Pessoa implements UsuarioAutenticavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id_professor;
-
     private String id_secretaria;
+    private LocalDate data_alteracao;
+
+    @Enumerated(EnumType.STRING)
+    private SituacaoType situacao;
 
     @Override
     public String getLogin() {

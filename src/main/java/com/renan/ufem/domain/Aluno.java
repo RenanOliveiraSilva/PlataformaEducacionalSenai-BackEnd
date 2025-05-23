@@ -11,8 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "aluno")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 public class Aluno extends Pessoa implements UsuarioAutenticavel {
 
     @Id

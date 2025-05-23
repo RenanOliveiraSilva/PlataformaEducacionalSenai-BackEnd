@@ -1,5 +1,6 @@
 package com.renan.ufem.dto.aluno;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public record AlunoRegisterRequestDTO(
@@ -16,6 +17,6 @@ public record AlunoRegisterRequestDTO(
         String telefone,
         String matricula,
         String sexo,
-        Date data_nasc
+        LocalDate data_nasc
 ) {
 }
