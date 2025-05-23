@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -18,6 +19,9 @@ public class Professor extends Pessoa implements UsuarioAutenticavel {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id_professor;
     private String id_secretaria;
+    private LocalDate data_alteracao;
+
+    @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
 
     @Override

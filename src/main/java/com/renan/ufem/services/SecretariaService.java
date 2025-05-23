@@ -10,6 +10,5 @@ public interface SecretariaService {
     Secretaria loginSecretaria(SecretariaLoginRequestDTO login);
     Secretaria criarSecretaria(SecretariaDTO secretaria);
     Secretaria atualizarSecretaria(SecretariaUpdateDTO secretaria, String id_secretaria);
-    //Secretaria inativarSecretaria(SecretariaDTO id_secretaria, SecretariaDTO senha);
 
 }

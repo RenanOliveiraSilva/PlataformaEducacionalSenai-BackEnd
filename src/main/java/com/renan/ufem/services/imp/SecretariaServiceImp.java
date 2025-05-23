@@ -9,6 +9,7 @@ import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.exceptions.UnauthorizedException;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.SecretariaRepository;
+import com.renan.ufem.services.ProfessorService;
 import com.renan.ufem.services.SecretariaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -52,11 +53,11 @@ public class SecretariaServiceImp implements SecretariaService {
 
     @Override
     public Secretaria atualizarSecretaria(SecretariaUpdateDTO body, String id_secretaria) {
-        Secretaria secretaria = repository.findById(id_secretaria)
+        Secretaria secretaria = this.repository.findById(id_secretaria)
                 .orElseThrow(() -> new NotFoundException("Secretaria não encontrada."));
 
         if (body.email() != null && !body.email().equals(secretaria.getEmail())) {
-            repository.findByEmail(body.email()).ifPresent(e -> {
+            this.repository.findByEmail(body.email()).ifPresent(e -> {
                 throw new ConflictException("E-mail já está em uso.");
             });
             secretaria.setEmail(body.email());
@@ -81,14 +82,15 @@ public class SecretariaServiceImp implements SecretariaService {
         Secretaria secretaria = new Secretaria();
         secretaria.setNome(DTO.nome());
         secretaria.setEmail(DTO.email());
-        secretaria.setSenha(DTO.senha());
-        secretaria.setTelefone(DTO.telefone());
+        secretaria.setSenha(passwordEncoder.encode(DTO.senha()));
         secretaria.setUF(DTO.UF());
         secretaria.setCidade(DTO.cidade());
         secretaria.setBairro(DTO.bairro());
         secretaria.setLogradouro(DTO.logradouro());
         secretaria.setNumero(DTO.numero());
+        secretaria.setTelefone(DTO.telefone());
 
         return secretaria;
     }
+
 }
