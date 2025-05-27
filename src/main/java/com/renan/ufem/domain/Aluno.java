@@ -19,6 +19,7 @@ public class Aluno extends Pessoa implements UsuarioAutenticavel {
     @Column(name = "id_aluno")
     private String idAluno;
     private String matricula;
+    @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
 
     @ManyToOne(fetch = FetchType.LAZY)
