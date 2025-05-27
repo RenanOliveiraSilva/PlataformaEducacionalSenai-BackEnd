@@ -27,11 +27,6 @@ public class AlunoController {
     private final JwtTokenService tokenService;
     private final AlunoService alunoService;
 
-    @GetMapping("/")
-    public ResponseEntity<String> getAluno() {
-        return ResponseEntity.ok("sucesso!");
-    }
-
     @PostMapping("/auth/login")
     public ResponseEntity login(@RequestBody AlunoLoginRequestDTO body){
         try{
@@ -45,7 +40,7 @@ public class AlunoController {
         }
     }
 
-    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
+    @PreAuthorize("hasRole('SECRETARIA')")
     @PostMapping("/criarAluno/{id_turma}")
     public ResponseEntity<Void> criarAluno(
             @RequestBody @Valid AlunoDTO body,
@@ -55,7 +50,7 @@ public class AlunoController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PreAuthorize("hasRole('SECRETARIA')")
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
     @PutMapping("/editar/{id_aluno}")
     public ResponseEntity<AlunoDTO> editarAluno(
             @PathVariable String id_aluno,
@@ -72,8 +67,8 @@ public class AlunoController {
         return ResponseEntity.ok(atualizado);
     }
 
-    @PreAuthorize("hasRole('SECRETARIA')")
-    @GetMapping("/buscar/{id_aluno}")
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
+    @GetMapping("/{id_aluno}")
     public ResponseEntity<AlunoDTO> buscarAluno(@PathVariable String id_aluno) {
         AlunoDTO aluno = alunoService.buscarAluno(id_aluno);
         return ResponseEntity.ok(aluno);
