@@ -1,12 +1,14 @@
 package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.Curso;
+import com.renan.ufem.domain.Secretaria;
 import com.renan.ufem.dto.curso.CursoDTO;
 import com.renan.ufem.dto.curso.CursoEditarDTO;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.CursoRepository;
+import com.renan.ufem.repositories.SecretariaRepository;
 import com.renan.ufem.services.CursoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,14 @@ import java.util.Optional;
 public class CursoServiceImp implements CursoService {
 
     private final CursoRepository repository;
+    private final SecretariaRepository secretariaRepositoryepository;
 
     @Override
     public Curso criarCurso(String id_secretaria, CursoDTO body) {
         Optional<Curso> cursoExiste = this.repository.findByNome(body.nome());
+
+        Secretaria secretaria = secretariaRepositoryepository.findById(id_secretaria)
+                .orElseThrow(() -> new NotFoundException("Secretaria não encontrada."));
 
         if(cursoExiste.isPresent()) {
             throw new RuntimeException("Curso já cadastrado");

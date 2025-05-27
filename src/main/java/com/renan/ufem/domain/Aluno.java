@@ -1,5 +1,6 @@
 package com.renan.ufem.domain;
 
+import com.renan.ufem.enums.SituacaoType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -18,9 +19,11 @@ public class Aluno extends Pessoa implements UsuarioAutenticavel {
     @Column(name = "id_aluno")
     private String idAluno;
     private String matricula;
+    private SituacaoType situacao;
 
-    @Column(name = "id_curso")
-    private String idCurso;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_turma", referencedColumnName = "id_turma")
+    private Turma turma;
 
     @Override
     public String getLogin() {

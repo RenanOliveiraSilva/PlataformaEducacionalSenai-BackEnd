@@ -1,16 +1,17 @@
 package com.renan.ufem.controllers;
 
 import com.renan.ufem.domain.Aluno;
-import com.renan.ufem.domain.Professor;
 import com.renan.ufem.dto.ResponseDTO;
 import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
-import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.AlunoRepository;
+import com.renan.ufem.services.AlunoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,50 +24,38 @@ public class AlunoController {
     private final AlunoRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenService tokenService;
+    private final AlunoService alunoService;
 
     @GetMapping("/")
     public ResponseEntity<String> getAluno() {
         return ResponseEntity.ok("sucesso!");
     }
 
-    @PostMapping("/login")
+    @PostMapping("/auth/login")
     public ResponseEntity login(@RequestBody AlunoLoginRequestDTO body){
-        Aluno aluno = this.repository.findByCPF(body.CPF()).orElseThrow(() -> new RuntimeException("User not found"));
+        try{
+            Aluno aluno = alunoService.loginAluno(body);
 
-        if(passwordEncoder.matches(body.senha(), aluno.getSenha())) {
             String token = this.tokenService.generateToken(aluno);
             return ResponseEntity.ok(new ResponseDTO(aluno.getIdAluno(), token));
-        }
 
-        return ResponseEntity.badRequest().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
-    @PostMapping("/{id_secretaria}/register")
-    public ResponseEntity criarAluno(@RequestBody AlunoDTO body){
+    @PreAuthorize("hasRole('SECRETARIA')")
+    @PostMapping("/criarAluno/{id_turma}")
+    public ResponseEntity criarAluno(
+            @RequestBody @Valid AlunoDTO body,
+            @PathVariable String id_turma
+    ) {
+        try {
+            alunoService.criarAluno(body, id_turma);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
 
-        Optional<Aluno> aluno = this.repository.findByCPF(body.CPF());
-
-        if (aluno.isEmpty()) {
-            Aluno newAluno = new Aluno();
-            newAluno.setNome(body.nome());
-            newAluno.setCPF(body.CPF());
-            newAluno.setEmail(body.email());
-            newAluno.setSenha(passwordEncoder.encode(body.senha()));
-            newAluno.setLogradouro(body.logradouro());
-            newAluno.setNumero(body.numero());
-            newAluno.setBairro(body.bairro());
-            newAluno.setCidade(body.cidade());
-            newAluno.setUF(body.UF());
-            newAluno.setTelefone(body.telefone());
-            newAluno.setSexo(body.sexo());
-            newAluno.setData_nasc(body.data_nasc());
-            newAluno.setMatricula(body.matricula());
-
-            this.repository.save(newAluno);
-
-            return ResponseEntity.ok(HttpStatus.NO_CONTENT);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-
-        return ResponseEntity.badRequest().build();
     }
 }

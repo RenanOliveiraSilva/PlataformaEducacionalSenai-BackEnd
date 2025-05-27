@@ -5,6 +5,6 @@ import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
 
 public interface AlunoService {
-    //Aluno login(AlunoLoginRequestDTO body);
-    //Aluno criarAluno(AlunoDTO body, String id_curso);
+    Aluno loginAluno(AlunoLoginRequestDTO body);
+    Aluno criarAluno(AlunoDTO body, String id_turma);
 }
