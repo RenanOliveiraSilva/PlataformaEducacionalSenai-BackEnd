@@ -1,10 +1,10 @@
 package com.renan.ufem.dto.aluno;
 
+import com.renan.ufem.domain.Aluno;
 import com.renan.ufem.enums.SituacaoType;
 import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 public record AlunoDTO(
         String nome,
@@ -21,7 +21,24 @@ public record AlunoDTO(
         String matricula,
         String sexo,
         LocalDate data_nasc,
-        SituacaoType situacao,
-        String idMatricula
+        SituacaoType situacao
 ) {
+        public AlunoDTO(Aluno aluno) {
+                this(
+                        aluno.getNome(),
+                        aluno.getCPF(),
+                        aluno.getLogradouro(),
+                        aluno.getBairro(),
+                        aluno.getNumero(),
+                        aluno.getCidade(),
+                        aluno.getUF(),
+                        aluno.getEmail(),
+                        aluno.getSenha(),
+                        aluno.getTelefone(),
+                        aluno.getMatricula(),
+                        aluno.getSexo(),
+                        aluno.getData_nasc(),
+                        aluno.getSituacao()
+                );
+        }
 }

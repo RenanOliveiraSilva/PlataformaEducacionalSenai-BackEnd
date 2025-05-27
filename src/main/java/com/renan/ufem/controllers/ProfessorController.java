@@ -7,6 +7,7 @@ import com.renan.ufem.dto.professor.ProfessorEditarDTO;
 import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.services.ProfessorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ProfessorController {
     @PreAuthorize("hasRole('SECRETARIA')")
     @PostMapping("/{id_secretaria}")
     public ResponseEntity criarProfessor(
-            @RequestBody ProfessorDTO body,
+            @RequestBody @Valid ProfessorDTO body,
             @PathVariable String id_secretaria
     ){
         try {
@@ -64,7 +65,7 @@ public class ProfessorController {
 
     @PreAuthorize("hasRole('SECRETARIA') or hasRole('PROFESSOR')")
     @PutMapping("/{id_professor}")
-    public  ResponseEntity<ProfessorDTO> editarProfessor(@PathVariable String id_professor, @RequestBody ProfessorEditarDTO professor) {
+    public  ResponseEntity<ProfessorDTO> editarProfessor(@PathVariable String id_professor, @RequestBody @Valid ProfessorEditarDTO professor) {
         Professor professorAtualizado = professorService.editarProfessor(id_professor, professor);
         return ResponseEntity.ok(new ProfessorDTO(professorAtualizado));
     }

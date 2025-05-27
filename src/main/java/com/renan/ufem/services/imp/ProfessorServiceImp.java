@@ -50,7 +50,7 @@ public class ProfessorServiceImp implements ProfessorService {
     }
 
     public Professor loginProfessor(ProfessorLoginRequestDTO body){
-        Professor professor = this.repository.findByCPF(body.CPF()).orElseThrow(() -> new RuntimeException("Login inválido."));
+        Professor professor = this.repository.findByEmail(body.email()).orElseThrow(() -> new RuntimeException("Login inválido."));
 
         if (passwordEncoder.matches(body.senha(), professor.getSenha())){
             return professor;

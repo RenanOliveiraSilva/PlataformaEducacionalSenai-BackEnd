@@ -2,6 +2,7 @@ package com.renan.ufem.dto.professor;
 
 import com.renan.ufem.domain.Professor;
 import com.renan.ufem.enums.SituacaoType;
+import jakarta.validation.constraints.Email;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,7 @@ public record ProfessorDTO(
         Integer numero,
         String cidade,
         String UF,
+        @Email(message = "Email deve estar em um formato válido")
         String email,
         String senha,
         String telefone,

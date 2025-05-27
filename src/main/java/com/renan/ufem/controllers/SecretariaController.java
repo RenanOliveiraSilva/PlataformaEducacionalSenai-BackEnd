@@ -7,6 +7,7 @@ import com.renan.ufem.dto.secretaria.SecretariaLoginRequestDTO;
 import com.renan.ufem.dto.secretaria.SecretariaUpdateDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.services.SecretariaService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,7 +36,7 @@ public class SecretariaController {
     }
 
     @PostMapping("/auth/register")
-    public ResponseEntity<ResponseDTO> criarSecretaria(@RequestBody SecretariaDTO body) {
+    public ResponseEntity<ResponseDTO> criarSecretaria(@RequestBody @Valid SecretariaDTO body) {
         Secretaria newSecretaria = secretariaService.criarSecretaria(body);
         String token = tokenService.generateToken(newSecretaria);
         return ResponseEntity.ok(new ResponseDTO(newSecretaria.getIdSecretaria(), token));
@@ -44,7 +45,7 @@ public class SecretariaController {
     @PutMapping("/{id_secretaria}")
     @PreAuthorize("hasRole('SECRETARIA')")
     public ResponseEntity<SecretariaDTO> atualizarSecretaria(
-            @RequestBody SecretariaUpdateDTO body,
+            @RequestBody @Valid SecretariaUpdateDTO body,
             @PathVariable String id_secretaria
     ) {
         Secretaria secretariaAtualizada = secretariaService.atualizarSecretaria(body, id_secretaria);

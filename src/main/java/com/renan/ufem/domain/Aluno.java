@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class Aluno extends Pessoa implements UsuarioAutenticavel {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_turma", referencedColumnName = "id_turma")
     private Turma turma;
+
+    private LocalDate data_alteracao;
 
     @Override
     public String getLogin() {

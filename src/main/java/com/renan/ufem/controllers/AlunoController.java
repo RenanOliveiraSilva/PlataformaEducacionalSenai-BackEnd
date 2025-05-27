@@ -4,6 +4,7 @@ import com.renan.ufem.domain.Aluno;
 import com.renan.ufem.dto.ResponseDTO;
 import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
+import com.renan.ufem.dto.aluno.AlunoUpdateDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.AlunoRepository;
 import com.renan.ufem.services.AlunoService;
@@ -44,18 +45,38 @@ public class AlunoController {
         }
     }
 
-    @PreAuthorize("hasRole('SECRETARIA')")
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
     @PostMapping("/criarAluno/{id_turma}")
-    public ResponseEntity criarAluno(
+    public ResponseEntity<Void> criarAluno(
             @RequestBody @Valid AlunoDTO body,
             @PathVariable String id_turma
     ) {
-        try {
-            alunoService.criarAluno(body, id_turma);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
-
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        alunoService.criarAluno(body, id_turma);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @PreAuthorize("hasRole('SECRETARIA')")
+    @PutMapping("/editar/{id_aluno}")
+    public ResponseEntity<AlunoDTO> editarAluno(
+            @PathVariable String id_aluno,
+            @RequestBody @Valid AlunoUpdateDTO body
+    ) {
+        Aluno alunoAtualizado = alunoService.editarAluno(body, id_aluno);
+        return ResponseEntity.ok(new AlunoDTO(alunoAtualizado));
+    }
+
+    @PreAuthorize("hasRole('SECRETARIA')")
+    @PutMapping("/situacao/{id_aluno}")
+    public ResponseEntity<AlunoDTO> alterarSituacaoAluno(@PathVariable String id_aluno) {
+        AlunoDTO atualizado = alunoService.alterarSituacaoAluno(id_aluno);
+        return ResponseEntity.ok(atualizado);
+    }
+
+    @PreAuthorize("hasRole('SECRETARIA')")
+    @GetMapping("/buscar/{id_aluno}")
+    public ResponseEntity<AlunoDTO> buscarAluno(@PathVariable String id_aluno) {
+        AlunoDTO aluno = alunoService.buscarAluno(id_aluno);
+        return ResponseEntity.ok(aluno);
+    }
+
 }
