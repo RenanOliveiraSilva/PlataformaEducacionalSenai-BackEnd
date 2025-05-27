@@ -6,7 +6,7 @@ public record SecretariaDTO(
         String nome,
         String logradouro,
         String bairro,
-        int numero,
+        Integer numero,
         String cidade,
         String UF,
         String email,

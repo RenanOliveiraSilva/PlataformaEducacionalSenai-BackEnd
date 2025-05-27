@@ -1,9 +1,11 @@
 package com.renan.ufem.controllers;
 
 import com.renan.ufem.domain.Aluno;
+import com.renan.ufem.domain.Professor;
 import com.renan.ufem.dto.ResponseDTO;
+import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
-import com.renan.ufem.dto.aluno.AlunoRegisterRequestDTO;
+import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.AlunoRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,14 +35,14 @@ public class AlunoController {
 
         if(passwordEncoder.matches(body.senha(), aluno.getSenha())) {
             String token = this.tokenService.generateToken(aluno);
-            return ResponseEntity.ok(new ResponseDTO(aluno.getId_aluno(), token));
+            return ResponseEntity.ok(new ResponseDTO(aluno.getIdAluno(), token));
         }
 
         return ResponseEntity.badRequest().build();
     }
 
     @PostMapping("/{id_secretaria}/register")
-    public ResponseEntity criarAluno(@RequestBody AlunoRegisterRequestDTO body){
+    public ResponseEntity criarAluno(@RequestBody AlunoDTO body){
 
         Optional<Aluno> aluno = this.repository.findByCPF(body.CPF());
 

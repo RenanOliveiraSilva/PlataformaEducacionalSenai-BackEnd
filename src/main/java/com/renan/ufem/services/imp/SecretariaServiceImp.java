@@ -7,9 +7,7 @@ import com.renan.ufem.dto.secretaria.SecretariaUpdateDTO;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.exceptions.UnauthorizedException;
-import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.repositories.SecretariaRepository;
-import com.renan.ufem.services.ProfessorService;
 import com.renan.ufem.services.SecretariaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class SecretariaServiceImp implements SecretariaService {
     private final SecretariaRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private JwtTokenService tokenService;
 
     @Override
     public SecretariaDTO getSecretaria(String id_secretaria) {

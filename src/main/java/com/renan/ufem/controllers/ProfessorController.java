@@ -34,7 +34,7 @@ public class ProfessorController {
             Professor professor = professorService.loginProfessor(body);
 
             String token = this.tokenService.generateToken(professor);
-            return ResponseEntity.ok(new ResponseDTO(professor.getId_professor(), token));
+            return ResponseEntity.ok(new ResponseDTO(professor.getIdProfessor(), token));
 
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

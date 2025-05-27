@@ -36,7 +36,7 @@ public record ProfessorDTO(
                 professor.getTelefone(),
                 professor.getSexo(),
                 professor.getData_nasc(),
-                professor.getId_secretaria()
+                professor.getIdSecretaria()
 
         );
     }

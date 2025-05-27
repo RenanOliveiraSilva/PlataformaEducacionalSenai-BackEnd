@@ -14,12 +14,12 @@ public class Secretaria implements UsuarioAutenticavel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id_secretaria;
-
+	@Column(name = "id_secretaria")
+	private String idSecretaria;
 	private String nome;
 	private String logradouro;
 	private String bairro;
-	private int numero;
+	private Integer numero;
 	private String cidade;
 	private String UF;
 	private String email;

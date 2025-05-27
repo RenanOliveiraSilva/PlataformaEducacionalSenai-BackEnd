@@ -17,8 +17,12 @@ public class Professor extends Pessoa implements UsuarioAutenticavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id_professor;
-    private String id_secretaria;
+    @Column(name = "id_professor")
+    private String idProfessor;
+
+    @Column(name = "id_secretaria")
+    private String idSecretaria;
+
     private LocalDate data_alteracao;
 
     @Enumerated(EnumType.STRING)
