@@ -24,6 +24,7 @@ public class Curso {
 
     @Enumerated(EnumType.STRING)
     private TurnoType turno;
+
     @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
 

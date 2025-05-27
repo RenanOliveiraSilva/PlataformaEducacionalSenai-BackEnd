@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface TurmaRepository extends JpaRepository<Turma, String> {
     Optional<Turma> findById(String id_turma);
+    boolean existsByNomeAndAnoAndIdSecretaria(String nome, String ano, String idSecretaria);
+
 }

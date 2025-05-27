@@ -4,5 +4,5 @@ import com.renan.ufem.domain.Turma;
 import com.renan.ufem.dto.turma.TurmaDTO;
 
 public interface TurmaService {
-    Turma criarTurma(TurmaDTO body);
+    Turma criarTurma(String id_secretaria, String id_curso, TurmaDTO body);
 }

@@ -23,6 +23,7 @@ public class Aluno extends Pessoa implements UsuarioAutenticavel {
     @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_turma", referencedColumnName = "id_turma")
     private Turma turma;
