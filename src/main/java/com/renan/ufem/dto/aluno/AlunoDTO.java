@@ -3,7 +3,7 @@ package com.renan.ufem.dto.aluno;
 import java.time.LocalDate;
 import java.util.Date;
 
-public record AlunoRegisterRequestDTO(
+public record AlunoDTO(
         String nome,
         String CPF,
         String situacao,

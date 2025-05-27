@@ -31,14 +31,14 @@ public class SecretariaController {
     public ResponseEntity<ResponseDTO> login(@RequestBody SecretariaLoginRequestDTO body) {
         Secretaria secretaria = secretariaService.loginSecretaria(body);
         String token = tokenService.generateToken(secretaria);
-        return ResponseEntity.ok(new ResponseDTO(secretaria.getId_secretaria(), token));
+        return ResponseEntity.ok(new ResponseDTO(secretaria.getIdSecretaria(), token));
     }
 
     @PostMapping("/auth/register")
     public ResponseEntity<ResponseDTO> criarSecretaria(@RequestBody SecretariaDTO body) {
         Secretaria newSecretaria = secretariaService.criarSecretaria(body);
         String token = tokenService.generateToken(newSecretaria);
-        return ResponseEntity.ok(new ResponseDTO(newSecretaria.getId_secretaria(), token));
+        return ResponseEntity.ok(new ResponseDTO(newSecretaria.getIdSecretaria(), token));
     }
 
     @PutMapping("/{id_secretaria}")

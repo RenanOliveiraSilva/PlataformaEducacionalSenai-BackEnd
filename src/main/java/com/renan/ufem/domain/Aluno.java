@@ -15,8 +15,12 @@ public class Aluno extends Pessoa implements UsuarioAutenticavel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    private String id_aluno;
+    @Column(name = "id_aluno")
+    private String idAluno;
     private String matricula;
+
+    @Column(name = "id_curso")
+    private String idCurso;
 
     @Override
     public String getLogin() {

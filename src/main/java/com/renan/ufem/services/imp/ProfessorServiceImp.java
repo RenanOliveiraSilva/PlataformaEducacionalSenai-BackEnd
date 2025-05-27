@@ -44,7 +44,7 @@ public class ProfessorServiceImp implements ProfessorService {
         newProfessor.setSexo(dto.sexo());
         newProfessor.setData_nasc(dto.data_nasc());
         newProfessor.setSituacao(SituacaoType.ATIVO);
-        newProfessor.setId_secretaria(idSecretaria);
+        newProfessor.setIdSecretaria(idSecretaria);
 
         return this.repository.save(newProfessor);
     }
@@ -103,10 +103,7 @@ public class ProfessorServiceImp implements ProfessorService {
             professor.setCPF(body.CPF());
         };
 
-        if (body.nome() != null) {
-            System.out.println(body.nome());
-            professor.setNome(body.nome());
-        }
+        if (body.nome() != null) professor.setNome(body.nome());
         if (body.telefone() != null) professor.setTelefone(body.telefone());
         if (body.UF() != null) professor.setUF(body.UF());
         if (body.cidade() != null) professor.setCidade(body.cidade());
