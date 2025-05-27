@@ -1,0 +1,413 @@
+type: collection.insomnia.rest/5.0
+name: Senai-Ufem
+meta:
+  id: wrk_c1bfdafbb6cc49ac9c9a92eaf8b04445
+  created: 1747317858495
+  modified: 1747317858495
+collection:
+  - name: Secretaria
+    meta:
+      id: fld_367f9ffbc20d4443bd9a33a439268a30
+      created: 1747317873188
+      modified: 1747754148666
+      sortKey: -1747317873188
+    children:
+      - url: "{{ _.baseUrl }}/secretaria/auth/register"
+        name: Register
+        meta:
+          id: req_4fe538c7c7634af288de727e1a90ad1c
+          created: 1747317876777
+          modified: 1747842400092
+          isPrivate: false
+          sortKey: -1747317876777
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "nome": "FATEC",
+                "logradouro": "Rua Ireno Greco",
+                "bairro": "Centro",
+                "numero": 123,
+                "cidade": "Franca",
+                "UF": "SP",
+                "email": "fatec@sp.gov.br",
+                "senha": "senha001",
+                "telefone": "(16) 12345-6789"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/secretaria/auth/login"
+        name: Login
+        meta:
+          id: req_001f8972ac924d0d8640ee16e0a9d232
+          created: 1747319440390
+          modified: 1748028563663
+          isPrivate: false
+          sortKey: -1747319440390
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"email": "fatec@sp.gov.br",
+            	"senha": "senha002"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/secretaria/aa3b0821-0902-452e-9312-f228a6f2c720"
+        name: getSecretaria
+        meta:
+          id: req_20749be85f16405da1127986018a2861
+          created: 1747325263199
+          modified: 1748024708301
+          isPrivate: false
+          sortKey: -1747319440490
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoiZmF0ZWNAc3AuZ292LmJyIiwicm9sZSI6IlJPTEVfU0VDUkVUQVJJQSIsImV4cCI6MTc0ODAzMTg4OX0.StqzaylArAImWr5npurEV3k6zWQEe5ljjp2B9LqIRnA
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/secretaria/aa3b0821-0902-452e-9312-f228a6f2c720"
+        name: editarSecretaria
+        meta:
+          id: req_112e1a0da47643bea63b5ccafb53c798
+          created: 1747935126290
+          modified: 1748024732141
+          isPrivate: false
+          sortKey: -1747935126290
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "nome": "FATEC"
+                
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoiZmF0ZWNAc3AuZ292LmJyIiwicm9sZSI6IlJPTEVfU0VDUkVUQVJJQSIsImV4cCI6MTc0ODAzMTg4OX0.StqzaylArAImWr5npurEV3k6zWQEe5ljjp2B9LqIRnA
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Aluno
+    meta:
+      id: fld_9e80fef0ebd04c5185dfcebf29088fec
+      created: 1747682560286
+      modified: 1747682560286
+      sortKey: -1747682560286
+    children:
+      - url: "{{ _.baseUrl }}/aluno/auth/register"
+        name: Register
+        meta:
+          id: req_345e96d8dda74fa589deed32fe2761a0
+          created: 1747682584951
+          modified: 1747754198073
+          isPrivate: false
+          sortKey: -1747682584951
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "nome": "Carlos Alberto",
+                "CPF": "12345678900",
+                "email": "carlos.alberto@exemplo.com",
+                "senha": "senhaSegura123!",
+                "logradouro": "Rua dos Estudantes",
+                "numero": 45,
+                "bairro": "Jardim Universitário",
+                "cidade": "Franca",
+                "UF": "SP",
+                "telefone": "(16) 99876-5432",
+                "sexo": "Masculino",
+                "data_nasc": "2000-05-15T00:00:00",
+                "matricula": "2023001234"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/aluno/auth/login"
+        name: Login
+        meta:
+          id: req_9e2ce1d355794fd3a3e730221bb205e7
+          created: 1747682796169
+          modified: 1747737538103
+          isPrivate: false
+          sortKey: -1747682796169
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"CPF": "12345678900",
+            	"senha": "senhaSegura123!"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/aluno/"
+        name: getAluno
+        meta:
+          id: req_d627e10c9432493c9e5290f1c1c376b4
+          created: 1747736933342
+          modified: 1747737611884
+          isPrivate: false
+          sortKey: -1747682796269
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoic2VjcmV0YXJpYS5zYXVkZUBzYW9wYXVsb2FhYWEuc3AuZ292LmJyIiwiZXhwIjoxNzQ3NzQ0MzExfQ.6e83gimiV3OhH-f9cOLadWU9oYw_qaV8u8IOLrWgqJI
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Professor
+    meta:
+      id: fld_a422220d455a4035b5929fda385ab231
+      created: 1747737652824
+      modified: 1748028920125
+      sortKey: -1747737652824
+    children:
+      - url: "{{ _.baseUrl }}/professor/aa3b0821-0902-452e-9312-f228a6f2c720"
+        name: criarProfessor
+        meta:
+          id: req_2520a548b9894d318eb738a23c761dd3
+          created: 1747756201019
+          modified: 1748022787209
+          isPrivate: false
+          sortKey: -1747756201019
+        method: POST
+        body:
+          mimeType: application/json
+          text: |
+            {
+              "nome": "Pedro Gomes",
+              "CPF": "12388128922",
+              "email": "aaaa@exemplo.com",
+              "senha": "123456",
+              "telefone": "(11) 91234-5678",
+              "logradouro": "Rua das Flores",
+              "bairro": "Centro",
+              "numero": "123",
+              "cidade": "São Paulo",
+            	"data_nasc": "2005-05-05",
+            	"sexo": "M",
+              "UF": "SP"
+            }
+        parameters:
+          - id: pair_a6c50258e562458c81040654db4de174
+            disabled: true
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          prefix: Bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoiZmF0ZWNAc3AuZ292LmJyIiwicm9sZSI6IlJPTEVfU0VDUkVUQVJJQSIsImV4cCI6MTc0ODAyODU0M30.NH0qzlgVR2u3KOjWbWINU9vrFv_FpUMleyZGgYlLJVg
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/professor/auth/login"
+        name: Login
+        meta:
+          id: req_2616fed6f0b045e087d596ae53bdf9bc
+          created: 1747847795187
+          modified: 1748003842756
+          isPrivate: false
+          sortKey: -1747847795187
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"CPF": "12388128922",
+            	"senha": "123456"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/professor/2712b220-090e-4b07-b0db-45ac94afc0eb"
+        name: getProfessor
+        meta:
+          id: req_3178847567b54abd9771664f1dfe8c05
+          created: 1748002968703
+          modified: 1748024305273
+          isPrivate: false
+          sortKey: -1748002968703
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoiMTIzODgxMjg5MjIiLCJyb2xlIjoiUk9MRV9QUk9GRVNTT1IiLCJleHAiOjE3NDgwMzE0OTd9.tv_J_7Ycyn6AEFUOBvQkEfrgSpWV4cyF7IxRtsPYxs8
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/professor/2712b220-090e-4b07-b0db-45ac94afc0eb/situacao"
+        name: alteraSituacao
+        meta:
+          id: req_b2d5fce10d1947e197e0b9543acf916e
+          created: 1748005662398
+          modified: 1748021557386
+          isPrivate: false
+          sortKey: -1748005662398
+        method: PUT
+        headers:
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          prefix: Bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoiZmF0ZWNAc3AuZ292LmJyIiwicm9sZSI6IlJPTEVfU0VDUkVUQVJJQSIsImV4cCI6MTc0ODAyODU0M30.NH0qzlgVR2u3KOjWbWINU9vrFv_FpUMleyZGgYlLJVg
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.baseUrl }}/professor/2712b220-090e-4b07-b0db-45ac94afc0eb"
+        name: editarProfessor
+        meta:
+          id: req_068da5a939b44c348b3cdbd86f46dd6d
+          created: 1748024131946
+          modified: 1748028481451
+          isPrivate: false
+          sortKey: -1748024131946
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+              "nome": "Paulo Silva"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/11.1.0
+        authentication:
+          type: bearer
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ1ZmVtIiwic3ViIjoiMTIzODgxMjg5MjIiLCJyb2xlIjoiUk9MRV9QUk9GRVNTT1IiLCJleHAiOjE3NDgwMzUwMTF9.zdKZvk1DfzUAGW8xlg_GqTR1v5jbbOSubE3OMeNLE2g
+          prefix: Bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_cf670894e783f15febd009860b5e38c133f31dd6
+    created: 1747317858504
+    modified: 1747317858504
+environments:
+  name: Base Environment
+  meta:
+    id: env_cf670894e783f15febd009860b5e38c133f31dd6
+    created: 1747317858500
+    modified: 1747317906922
+    isPrivate: false
+  data:
+    baseUrl: http://localhost:8080
