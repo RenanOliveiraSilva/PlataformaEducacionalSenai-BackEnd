@@ -61,7 +61,7 @@ public class AlunoController {
     }
 
     @PreAuthorize("hasRole('SECRETARIA')")
-    @PutMapping("/situacao/{id_aluno}")
+    @DeleteMapping("/situacao/{id_aluno}")
     public ResponseEntity<AlunoDTO> alterarSituacaoAluno(@PathVariable String id_aluno) {
         AlunoDTO atualizado = alunoService.alterarSituacaoAluno(id_aluno);
         return ResponseEntity.ok(atualizado);
