@@ -2,7 +2,10 @@ package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.Turma;
 import com.renan.ufem.dto.turma.TurmaDTO;
+import com.renan.ufem.dto.turma.TurmaResponseDTO;
+import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
+import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.TurmaRepository;
 import com.renan.ufem.services.TurmaService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,15 @@ public class TurmaServiceImp implements TurmaService {
         turma.setTurno(body.turno());
         turma.setIdCurso(id_curso);
         turma.setIdSecretaria(id_secretaria);
+        turma.setSituacao(SituacaoType.ATIVO);
         return repository.save(turma);
+    }
+
+    @Override
+    public TurmaResponseDTO buscarTurma(String id_turma) {
+        Turma turma = this.repository.findById(id_turma)
+                .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
+
+        return new TurmaResponseDTO(turma);
     }
 }

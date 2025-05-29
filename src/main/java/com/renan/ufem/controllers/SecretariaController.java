@@ -42,7 +42,7 @@ public class SecretariaController {
         return ResponseEntity.ok(new ResponseDTO(newSecretaria.getIdSecretaria(), token));
     }
 
-    @DeleteMapping("/{id_secretaria}")
+    @PutMapping("/{id_secretaria}")
     @PreAuthorize("hasRole('SECRETARIA')")
     public ResponseEntity<SecretariaDTO> atualizarSecretaria(
             @RequestBody @Valid SecretariaUpdateDTO body,
