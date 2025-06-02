@@ -4,6 +4,7 @@ import com.renan.ufem.domain.Professor;
 import com.renan.ufem.dto.professor.ProfessorDTO;
 import com.renan.ufem.dto.professor.ProfessorEditarDTO;
 import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
+import com.renan.ufem.dto.professor.ProfessorResponseDTO;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.ProfessorRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.renan.ufem.enums.SituacaoType;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -120,5 +122,13 @@ public class ProfessorServiceImp implements ProfessorService {
 
         return this.repository.save(professor);
 
+    }
+
+    @Override
+    public List<ProfessorResponseDTO> buscarProfessorPorSecretaria(String id_secretaria) {
+        return repository.findByIdSecretaria(id_secretaria)
+                .stream()
+                .map(ProfessorResponseDTO::new)
+                .toList();
     }
 }
