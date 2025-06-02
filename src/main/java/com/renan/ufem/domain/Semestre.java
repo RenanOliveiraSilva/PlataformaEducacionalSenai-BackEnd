@@ -28,6 +28,7 @@ public class Semestre {
     @Enumerated(EnumType.STRING)
     private StatusSemestre status;
 
+
 }
 
 

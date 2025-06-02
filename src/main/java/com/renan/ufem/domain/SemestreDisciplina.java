@@ -10,10 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 public class SemestreDisciplina {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_semestre")
     private Semestre semestre;
