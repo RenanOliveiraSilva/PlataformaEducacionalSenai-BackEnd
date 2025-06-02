@@ -57,7 +57,7 @@ public class ProfessorController {
     }
 
     @PreAuthorize("hasRole('SECRETARIA')")
-    @PutMapping("/{id_professor}/situacao")
+    @DeleteMapping("/{id_professor}/situacao")
     public ResponseEntity<ProfessorDTO> alterarSituacao(@PathVariable String id_professor) {
         ProfessorDTO atualizado = professorService.alterarSituacaoProfessor(id_professor);
         return ResponseEntity.ok(atualizado);

@@ -1,5 +1,7 @@
 package com.renan.ufem.domain;
 
+import com.renan.ufem.enums.SituacaoType;
+import com.renan.ufem.enums.TurnoType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +19,12 @@ public class Turma {
 
     private String nome;
     private String ano;
+
+    @Enumerated(EnumType.STRING)
+    private TurnoType turno;
+
+    @Enumerated(EnumType.STRING)
+    private SituacaoType situacao;
 
     @Column(name = "id_curso")
     private String idCurso;

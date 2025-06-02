@@ -2,6 +2,10 @@ package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.Turma;
 import com.renan.ufem.dto.turma.TurmaDTO;
+import com.renan.ufem.dto.turma.TurmaResponseDTO;
+import com.renan.ufem.enums.SituacaoType;
+import com.renan.ufem.exceptions.ConflictException;
+import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.TurmaRepository;
 import com.renan.ufem.services.TurmaService;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +18,30 @@ public class TurmaServiceImp implements TurmaService {
     private final TurmaRepository repository;
 
     @Override
-    public Turma criarTurma(TurmaDTO body) {
+    public Turma criarTurma(String id_secretaria, String id_curso, TurmaDTO body) {
+        boolean turmaExistente = repository.existsByNomeAndAnoAndIdSecretaria(
+                body.nome(), body.ano(), id_secretaria
+        );
+
+        if (turmaExistente) {
+            throw new ConflictException("Já existe uma turma com este nome e ano para esta secretaria.");
+        }
+
         Turma turma = new Turma();
         turma.setNome(body.nome());
         turma.setAno(body.ano());
-        turma.setIdTurma(body.id_curso());
-        turma.setIdSecretaria(body.id_secretaria());
+        turma.setTurno(body.turno());
+        turma.setIdCurso(id_curso);
+        turma.setIdSecretaria(id_secretaria);
+        turma.setSituacao(SituacaoType.ATIVO);
         return repository.save(turma);
+    }
+
+    @Override
+    public TurmaResponseDTO buscarTurma(String id_turma) {
+        Turma turma = this.repository.findById(id_turma)
+                .orElseThrow(() -> new NotFoundException("Turma não encontrada"));
+
+        return new TurmaResponseDTO(turma);
     }
 }

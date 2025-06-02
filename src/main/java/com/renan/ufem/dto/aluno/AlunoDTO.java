@@ -33,7 +33,7 @@ public record AlunoDTO(
                         aluno.getCidade(),
                         aluno.getUF(),
                         aluno.getEmail(),
-                        aluno.getSenha(),
+                        null,
                         aluno.getTelefone(),
                         aluno.getMatricula(),
                         aluno.getSexo(),
