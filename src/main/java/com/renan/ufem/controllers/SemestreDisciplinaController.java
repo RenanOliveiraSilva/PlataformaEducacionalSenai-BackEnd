@@ -1,5 +1,6 @@
 package com.renan.ufem.controllers;
 
+import com.renan.ufem.domain.SemestreDisciplina;
 import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaRequestDTO;
 import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaResponseDTO;
 import com.renan.ufem.services.SemestreDisciplinaService;
@@ -18,18 +19,14 @@ public class SemestreDisciplinaController {
     private final SemestreDisciplinaService service;
 
     @PostMapping
-    public ResponseEntity<SemestreDisciplinaResponseDTO> criar(@RequestBody SemestreDisciplinaRequestDTO dto) {
-        return ResponseEntity.ok(service.criar(dto));
-    }
+    public ResponseEntity<SemestreDisciplina> criarVinculo(
+            @RequestParam String idSemestre,
+            @RequestParam String idDisciplina,
+            @RequestParam String idProfessor,
+            @RequestParam String diaSemana) {
 
-    @GetMapping
-    public ResponseEntity<List<SemestreDisciplinaResponseDTO>> listar() {
-        return ResponseEntity.ok(service.listar());
+        SemestreDisciplina sd = service.salvar(idSemestre, idDisciplina, idProfessor, diaSemana);
+        return ResponseEntity.ok(sd);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<SemestreDisciplinaResponseDTO> buscar(@PathVariable String id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
-    }
-
 }
+

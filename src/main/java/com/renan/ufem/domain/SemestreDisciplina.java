@@ -10,14 +10,23 @@ import lombok.*;
 @AllArgsConstructor
 public class SemestreDisciplina {
 
+    @EmbeddedId
+    private SemestreDisciplinaId id;
+
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idSemestre")
     @JoinColumn(name = "id_semestre")
     private Semestre semestre;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idDisciplina")
     @JoinColumn(name = "id_disciplina")
     private Disciplina disciplina;
 
-    private String professor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idProfessor")
+    @JoinColumn(name = "id_professor")
+    private Professor professor;
+
     private String diaSemana;
 }

@@ -1,5 +1,6 @@
 package com.renan.ufem.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.renan.ufem.enums.SituacaoType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -27,6 +28,10 @@ public class Professor extends Pessoa implements UsuarioAutenticavel {
 
     @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
+
+    //@OneToMany(mappedBy = "semestre_disciplina", cascade = CascadeType.ALL)
+    //@JsonManagedReference
+    //private List<Semestre> semestres;
 
     @Override
     public String getLogin() {

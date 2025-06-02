@@ -1,40 +1,40 @@
-package com.renan.ufem.services.imp;
-
-import com.renan.ufem.domain.Disciplina;
-import com.renan.ufem.domain.Semestre;
-import com.renan.ufem.domain.SemestreDisciplina;
-import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaRequestDTO;
-import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaResponseDTO;
-import com.renan.ufem.exceptions.NotFoundException;
-import com.renan.ufem.repositories.*;
-import com.renan.ufem.services.SemestreDisciplinaService;
+import com.renan.ufem.domain.*;
+import com.renan.ufem.repositories.DisciplinaRepository;
+import com.renan.ufem.repositories.ProfessorRepository;
+import com.renan.ufem.repositories.SemestreDisciplinaRepository;
+import com.renan.ufem.repositories.SemestreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
-public class SemestreDisciplinaServiceImp implements SemestreDisciplinaService {
+public class SemestreDisciplinaService {
 
     private final SemestreDisciplinaRepository repository;
     private final SemestreRepository semestreRepository;
     private final DisciplinaRepository disciplinaRepository;
+    private final ProfessorRepository professorRepository;
 
-    @Override
-    public SemestreDisciplinaResponseDTO criar(SemestreDisciplinaRequestDTO dto) {
-        Semestre semestre = semestreRepository.findById(dto.idSemestre())
-                .orElseThrow(() -> new NotFoundException("Semestre não encontrado"));
+    public SemestreDisciplina salvar(String idSemestre, String idDisciplina, String idProfessor, String diaSemana) {
 
-        Disciplina disciplina = disciplinaRepository.findById(dto.idDisciplina())
-                .orElseThrow(() -> new NotFoundException("Disciplina não encontrada"));
+        Semestre semestre = semestreRepository.findById(idSemestre)
+                .orElseThrow(() -> new RuntimeException("Semestre não encontrado"));
 
+        Disciplina disciplina = disciplinaRepository.findById(idDisciplina)
+                .orElseThrow(() -> new RuntimeException("Disciplina não encontrada"));
 
+        Professor professor = professorRepository.findById(idProfessor)
+                .orElseThrow(() -> new RuntimeException("Professor não encontrado"));
 
+        SemestreDisciplinaId compositeId = new SemestreDisciplinaId(idSemestre, idDisciplina, idProfessor);
+
+        SemestreDisciplina sd = new SemestreDisciplina();
+        sd.setId(compositeId);
+        sd.setSemestre(semestre);
+        sd.setDisciplina(disciplina);
+        sd.setProfessor(professor);
+        sd.setDiaSemana(diaSemana);
+
+        return repository.save(sd);
     }
-
-
-
-
 }
