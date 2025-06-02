@@ -9,6 +9,5 @@ public interface SemestreDisciplinaService {
     SemestreDisciplinaResponseDTO criar(SemestreDisciplinaRequestDTO dto);
     List<SemestreDisciplinaResponseDTO> listar();
     SemestreDisciplinaResponseDTO buscarPorId(String id);
-    SemestreDisciplinaResponseDTO editar(String id, SemestreDisciplinaRequestDTO dto);
-    void deletar(String id);
+
 }

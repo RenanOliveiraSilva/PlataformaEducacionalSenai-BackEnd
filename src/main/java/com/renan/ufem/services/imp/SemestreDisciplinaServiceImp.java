@@ -45,28 +45,6 @@ public class SemestreDisciplinaServiceImp implements SemestreDisciplinaService {
         return toDTO(sd);
     }
 
-    @Override
-    public SemestreDisciplinaResponseDTO editar(String id, SemestreDisciplinaRequestDTO dto) {
-        SemestreDisciplina sd = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Registro não encontrado"));
-
-        Semestre semestre = semestreRepository.findById(dto.idSemestre())
-                .orElseThrow(() -> new NotFoundException("Semestre não encontrado"));
-        Disciplina disciplina = disciplinaRepository.findById(dto.idDisciplina())
-                .orElseThrow(() -> new NotFoundException("Disciplina não encontrada"));
-
-        sd.setSemestre(semestre);
-        sd.setDisciplina(disciplina);
-        sd.setProfessor(dto.professor());
-        sd.setDiaSemana(dto.diaSemana());
-
-        return toDTO(repository.save(sd));
-    }
-
-    @Override
-    public void deletar(String id) {
-        repository.deleteById(id);
-    }
 
     private SemestreDisciplinaResponseDTO toDTO(SemestreDisciplina sd) {
         return new SemestreDisciplinaResponseDTO(

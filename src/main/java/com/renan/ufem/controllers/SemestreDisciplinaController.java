@@ -32,14 +32,4 @@ public class SemestreDisciplinaController {
         return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SemestreDisciplinaResponseDTO> editar(@PathVariable String id, @RequestBody SemestreDisciplinaRequestDTO dto) {
-        return ResponseEntity.ok(service.editar(id, dto));
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable String id) {
-        service.deletar(id);
-        return ResponseEntity.noContent().build();
-    }
 }

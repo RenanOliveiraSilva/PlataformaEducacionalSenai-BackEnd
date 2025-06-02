@@ -1,29 +1,27 @@
 package com.renan.ufem.controllers;
 
 import com.renan.ufem.domain.Aluno;
+import com.renan.ufem.domain.Semestre;
 import com.renan.ufem.dto.ResponseDTO;
 import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
 import com.renan.ufem.dto.aluno.AlunoUpdateDTO;
+import com.renan.ufem.dto.curso.CursoDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
-import com.renan.ufem.repositories.AlunoRepository;
 import com.renan.ufem.services.AlunoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/aluno")
 @RequiredArgsConstructor
 public class AlunoController {
-    private final AlunoRepository repository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtTokenService tokenService;
     private final AlunoService alunoService;
 
@@ -72,6 +70,20 @@ public class AlunoController {
     public ResponseEntity<AlunoDTO> buscarAluno(@PathVariable String id_aluno) {
         AlunoDTO aluno = alunoService.buscarAluno(id_aluno);
         return ResponseEntity.ok(aluno);
+    }
+
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
+    @GetMapping("/curso/{id_aluno}")
+    public ResponseEntity<CursoDTO> buscarCursoAluno(@PathVariable String id_aluno) {
+        CursoDTO curso = alunoService.buscarAlunoCurso(id_aluno);
+        return ResponseEntity.ok(curso);
+    }
+
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
+    @GetMapping("/{id_aluno}/semestres")
+    public ResponseEntity<List<Semestre>> buscarSemestresDoAluno(@PathVariable String id_aluno) {
+        List<Semestre> semestres = alunoService.buscarPeriodoAluno(id_aluno);
+        return ResponseEntity.ok(semestres);
     }
 
 }

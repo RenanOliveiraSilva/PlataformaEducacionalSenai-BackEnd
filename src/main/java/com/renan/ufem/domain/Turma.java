@@ -1,5 +1,6 @@
 package com.renan.ufem.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.enums.TurnoType;
 import jakarta.persistence.*;
@@ -35,4 +36,8 @@ public class Turma {
     // Mapeamento do relacionamento com Aluno
     @OneToMany(mappedBy = "turma", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Aluno> alunos;
+
+    @OneToOne(mappedBy = "turma", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private Grade grade;
 }

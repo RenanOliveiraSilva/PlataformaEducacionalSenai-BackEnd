@@ -8,4 +8,5 @@ import java.util.List;
 public interface SemestreService {
     Semestre criarSemestre(SemestreDTO dto);
     List<Semestre> listarPorGrade(String idGrade);
+    Semestre alterarSituacaoSemestre(String id_semestre);
 }
