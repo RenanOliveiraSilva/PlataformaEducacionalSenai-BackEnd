@@ -5,6 +5,7 @@ import com.renan.ufem.dto.ResponseDTO;
 import com.renan.ufem.dto.professor.ProfessorDTO;
 import com.renan.ufem.dto.professor.ProfessorEditarDTO;
 import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
+import com.renan.ufem.dto.professor.ProfessorResponseDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.services.ProfessorService;
 import jakarta.validation.Valid;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/professor")
@@ -68,5 +71,11 @@ public class ProfessorController {
     public  ResponseEntity<ProfessorDTO> editarProfessor(@PathVariable String id_professor, @RequestBody @Valid ProfessorEditarDTO professor) {
         Professor professorAtualizado = professorService.editarProfessor(id_professor, professor);
         return ResponseEntity.ok(new ProfessorDTO(professorAtualizado));
+    }
+
+    @PreAuthorize("hasRole('SECRETARIA')")
+    @GetMapping("/secretaria/{id_secretaria}")
+    public ResponseEntity<List<ProfessorResponseDTO>> listarPorSecretaria(@PathVariable String id_secretaria) {
+        return ResponseEntity.ok(professorService.buscarProfessorPorSecretaria(id_secretaria));
     }
 }

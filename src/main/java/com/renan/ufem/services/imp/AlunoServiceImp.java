@@ -1,31 +1,33 @@
 package com.renan.ufem.services.imp;
 
-import com.renan.ufem.domain.Aluno;
-import com.renan.ufem.domain.Professor;
-import com.renan.ufem.domain.Turma;
+import com.renan.ufem.domain.*;
 import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
 import com.renan.ufem.dto.aluno.AlunoUpdateDTO;
+import com.renan.ufem.dto.curso.CursoDTO;
 import com.renan.ufem.dto.professor.ProfessorDTO;
+import com.renan.ufem.dto.semestre.SemestreDTO;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
-import com.renan.ufem.repositories.AlunoRepository;
-import com.renan.ufem.repositories.TurmaRepository;
+import com.renan.ufem.repositories.*;
 import com.renan.ufem.services.AlunoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AlunoServiceImp implements AlunoService {
     private final AlunoRepository repository;
+    private final CursoRepository cursoRepository;
     private final PasswordEncoder passwordEncoder;
     private final TurmaRepository turmaRepository;
+    private final SemestreRepository semestreRepository;
 
     @Override
     public Aluno loginAluno(AlunoLoginRequestDTO body) {
@@ -135,6 +137,33 @@ public class AlunoServiceImp implements AlunoService {
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
         return new AlunoDTO(aluno);
+    }
+
+    @Override
+    public CursoDTO buscarAlunoCurso(String id_aluno) {
+        Aluno aluno = this.repository.findById(id_aluno)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
+
+        Curso curso = this.cursoRepository.findById(aluno.getTurma().getIdCurso())
+                .orElseThrow(() -> new NotFoundException("Curso não encontrado"));
+
+        return new CursoDTO(curso);
+    }
+
+    @Override
+    public List<Semestre> buscarPeriodoAluno(String id_aluno) {
+        Aluno aluno = this.repository.findById(id_aluno)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
+
+        String idGrade = aluno.getTurma().getGrade().getIdGrade();
+
+        List<Semestre> semestresAluno = this.semestreRepository.findAllByGrade_IdGrade(idGrade);
+
+        if (semestresAluno.isEmpty()) {
+            throw new NotFoundException("Semestres não encontrados para a grade.");
+        }
+
+        return semestresAluno;
     }
 
 }
