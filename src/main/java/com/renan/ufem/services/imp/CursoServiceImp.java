@@ -38,7 +38,6 @@ public class CursoServiceImp implements CursoService {
         Curso newCurso = new Curso();
         newCurso.setNome(body.nome());
         newCurso.setDuracao(body.duracao());
-        newCurso.setDuracao(body.duracao());
         newCurso.setSituacao(SituacaoType.ATIVO);
         newCurso.setIdSecretaria(id_secretaria);
 

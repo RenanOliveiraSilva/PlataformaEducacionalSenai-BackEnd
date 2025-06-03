@@ -1,3 +1,6 @@
 package com.renan.ufem.dto.semestreDisciplina;
 
-public record SemestreDisciplinaDTO(String idSemestre, String idProfessor, String idDisciplina, String diaSemana) {}
+import com.renan.ufem.enums.DiaSemana;
+import com.renan.ufem.enums.StatusSemestre;
+
+public record SemestreDisciplinaDTO(DiaSemana diaSemana, StatusSemestre status) {}

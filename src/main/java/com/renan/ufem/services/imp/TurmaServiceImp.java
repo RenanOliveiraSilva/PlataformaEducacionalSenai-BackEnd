@@ -1,11 +1,13 @@
 package com.renan.ufem.services.imp;
 
+import com.renan.ufem.domain.Grade;
 import com.renan.ufem.domain.Turma;
 import com.renan.ufem.dto.turma.TurmaDTO;
 import com.renan.ufem.dto.turma.TurmaResponseDTO;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
+import com.renan.ufem.repositories.GradeRepository;
 import com.renan.ufem.repositories.TurmaRepository;
 import com.renan.ufem.services.TurmaService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class TurmaServiceImp implements TurmaService {
 
     private final TurmaRepository repository;
+    private final GradeRepository gradeRepository;
 
     @Override
     public Turma criarTurma(String id_secretaria, String id_curso, TurmaDTO body) {
@@ -34,7 +37,17 @@ public class TurmaServiceImp implements TurmaService {
         turma.setIdCurso(id_curso);
         turma.setIdSecretaria(id_secretaria);
         turma.setSituacao(SituacaoType.ATIVO);
-        return repository.save(turma);
+
+        Turma newTurma = repository.save(turma);
+
+        if(newTurma == null) { new ConflictException("Turma não encontrada"); }
+
+        Grade grade = new Grade();
+        grade.setTurma(newTurma);
+        grade.setIdCurso(id_curso);
+        gradeRepository.save(grade);
+
+        return turma;
     }
 
     @Override

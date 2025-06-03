@@ -1,9 +1,8 @@
 package com.renan.ufem.dto.semestreDisciplina;
 
+import com.renan.ufem.enums.DiaSemana;
+
 public record SemestreDisciplinaRequestDTO(
-        String idSemestre,
-        String idDisciplina,
-        String idProfessor,
-        String diaSemana
+        DiaSemana diaSemana
 ) {}
 

@@ -1,6 +1,8 @@
 package com.renan.ufem.controllers;
 
 import com.renan.ufem.domain.SemestreDisciplina;
+import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaDTO;
+import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaRequestDTO;
 import com.renan.ufem.enums.DiaSemana;
 import com.renan.ufem.services.SemestreDisciplinaService;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,9 @@ public class SemestreDisciplinaController {
             @RequestParam String idSemestre,
             @RequestParam String idDisciplina,
             @RequestParam String idProfessor,
-            @RequestBody DiaSemana diaSemana) {
+            @RequestBody SemestreDisciplinaRequestDTO body) {
 
-        SemestreDisciplina sd = service.salvar(idSemestre, idDisciplina, idProfessor, diaSemana);
+        SemestreDisciplina sd = service.salvar(idSemestre, idDisciplina, idProfessor, body);
         return ResponseEntity.ok(sd);
     }
 }

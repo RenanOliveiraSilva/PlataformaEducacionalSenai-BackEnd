@@ -1,7 +1,7 @@
 package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.*;
-import com.renan.ufem.enums.DiaSemana;
+import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaRequestDTO;
 import com.renan.ufem.enums.StatusSemestre;
 import com.renan.ufem.repositories.DisciplinaRepository;
 import com.renan.ufem.repositories.ProfessorRepository;
@@ -21,7 +21,12 @@ public class SemestreDisciplinaServiceImp implements SemestreDisciplinaService {
     private final ProfessorRepository professorRepository;
 
     @Override
-    public SemestreDisciplina salvar(String idSemestre, String idDisciplina, String idProfessor, DiaSemana diaSemana) {
+    public SemestreDisciplina salvar(String idSemestre, String idDisciplina, String idProfessor, SemestreDisciplinaRequestDTO body) {
+
+        repository.existsByProfessorAndDiaSemanaAndStatusAndamento(idProfessor, body.diaSemana())
+            .ifPresent(sd -> {
+                throw new RuntimeException("Este professor já possui uma aula em andamento neste dia da semana.");
+            });
 
         Semestre semestre = semestreRepository.findById(idSemestre)
                 .orElseThrow(() -> new RuntimeException("Semestre não encontrado"));
@@ -39,9 +44,11 @@ public class SemestreDisciplinaServiceImp implements SemestreDisciplinaService {
         sd.setSemestre(semestre);
         sd.setDisciplina(disciplina);
         sd.setProfessor(professor);
-        sd.setDiaSemana(diaSemana);
+        sd.setDiaSemana(body.diaSemana());
         sd.setStatus(StatusSemestre.ANDAMENTO);
 
         return repository.save(sd);
     }
+
+
 }
