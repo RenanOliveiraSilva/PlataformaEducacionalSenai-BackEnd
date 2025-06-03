@@ -1,6 +1,7 @@
 package com.renan.ufem.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.renan.ufem.enums.StatusSemestre;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -28,7 +29,9 @@ public class Semestre {
     @Enumerated(EnumType.STRING)
     private StatusSemestre status;
 
-
+    @OneToMany(mappedBy = "semestre", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<SemestreDisciplina> semestreDisciplinas;
 }
 
 

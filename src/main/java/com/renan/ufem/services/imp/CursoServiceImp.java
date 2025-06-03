@@ -38,7 +38,6 @@ public class CursoServiceImp implements CursoService {
         Curso newCurso = new Curso();
         newCurso.setNome(body.nome());
         newCurso.setDuracao(body.duracao());
-        newCurso.setTurno(body.turno());
         newCurso.setDuracao(body.duracao());
         newCurso.setSituacao(SituacaoType.ATIVO);
         newCurso.setIdSecretaria(id_secretaria);
@@ -59,7 +58,6 @@ public class CursoServiceImp implements CursoService {
         };
 
         if (body.duracao() != null) curso.setDuracao(body.duracao());
-        if (body.turno() != null) curso.setTurno(body.turno());
 
         return this.repository.save(curso);
 

@@ -23,9 +23,6 @@ public class Curso {
     private String idSecretaria;
 
     @Enumerated(EnumType.STRING)
-    private TurnoType turno;
-
-    @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
 
 }

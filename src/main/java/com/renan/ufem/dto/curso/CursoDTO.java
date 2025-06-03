@@ -7,7 +7,6 @@ import com.renan.ufem.enums.TurnoType;
 public record CursoDTO (
         String nome,
         Integer duracao,
-        TurnoType turno,
         SituacaoType situacao,
         String id_secretaria
 ) {
@@ -15,7 +14,6 @@ public record CursoDTO (
         this(
                 curso.getNome(),
                 curso.getDuracao(),
-                curso.getTurno(),
                 curso.getSituacao(),
                 curso.getIdSecretaria()
         );

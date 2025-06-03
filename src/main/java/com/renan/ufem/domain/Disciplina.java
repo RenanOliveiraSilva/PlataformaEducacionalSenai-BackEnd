@@ -1,11 +1,13 @@
 // Disciplina.java (Domain)
 package com.renan.ufem.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.renan.ufem.enums.SituacaoType;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "disciplina")
@@ -29,4 +31,9 @@ public class Disciplina {
 
     @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
+
+    @OneToMany(mappedBy = "disciplina", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<SemestreDisciplina> semestreDisciplinas;
+
 }

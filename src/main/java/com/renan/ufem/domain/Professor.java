@@ -29,9 +29,11 @@ public class Professor extends Pessoa implements UsuarioAutenticavel {
     @Enumerated(EnumType.STRING)
     private SituacaoType situacao;
 
-    //@OneToMany(mappedBy = "semestre_disciplina", cascade = CascadeType.ALL)
-    //@JsonManagedReference
-    //private List<Semestre> semestres;
+    @OneToMany(mappedBy = "professor", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<SemestreDisciplina> semestreDisciplinas;
+
+
 
     @Override
     public String getLogin() {
