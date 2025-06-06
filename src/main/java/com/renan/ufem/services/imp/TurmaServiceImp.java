@@ -47,7 +47,9 @@ public class TurmaServiceImp implements TurmaService {
         grade.setIdCurso(id_curso);
         gradeRepository.save(grade);
 
-        return turma;
+        if(grade == null) { new ConflictException("Falha ao criar grade da turma: " + newTurma.getIdTurma()); }
+
+        return newTurma;
     }
 
     @Override

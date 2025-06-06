@@ -24,9 +24,9 @@ public class GradeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarGrade(dto));
     }
 
-    @GetMapping
     @PreAuthorize("hasRole('SECRETARIA')")
-    public ResponseEntity<List<Grade>> listar() {
-        return ResponseEntity.ok(service.listarGrades());
+    @GetMapping("/{id_turma}")
+    public ResponseEntity<GradeDTO> buscarGradePorTurma(@PathVariable String id_turma) {
+        return ResponseEntity.ok(service.buscarGradePorTurma(id_turma));
     }
 }

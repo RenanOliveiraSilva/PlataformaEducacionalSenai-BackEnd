@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface GradeService {
     Grade criarGrade(GradeDTO dto);
-    List<Grade> listarGrades();
+    GradeDTO buscarGradePorTurma(String id_turma);
 }

@@ -4,6 +4,7 @@ import com.renan.ufem.domain.Grade;
 import com.renan.ufem.domain.Turma;
 import com.renan.ufem.dto.grade.GradeDTO;
 import com.renan.ufem.exceptions.ConflictException;
+import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.GradeRepository;
 import com.renan.ufem.repositories.TurmaRepository;
 import com.renan.ufem.services.GradeService;
@@ -29,8 +30,11 @@ public class GradeServiceImp implements GradeService {
     }
 
     @Override
-    public List<Grade> listarGrades() {
-        return repository.findAll();
+    public GradeDTO buscarGradePorTurma(String id_turma) {
+        Grade grade = this.repository.findByTurma_IdTurma(id_turma)
+                .orElseThrow(() -> new NotFoundException("Grade da turma não encontrada!"));
+
+        return new GradeDTO(grade);
     }
 }
 

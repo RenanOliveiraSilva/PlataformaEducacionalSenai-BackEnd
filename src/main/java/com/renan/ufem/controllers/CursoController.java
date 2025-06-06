@@ -23,7 +23,7 @@ public class CursoController {
     @PostMapping("/{id_secretaria}")
     public ResponseEntity<CursoResponseDTO> criarCurso(@PathVariable String id_secretaria, @RequestBody CursoDTO body) {
         Curso curso = this.cursoService.criarCurso(id_secretaria, body);
-        return ResponseEntity.ok(new CursoResponseDTO(curso.getIdCurso()));
+        return ResponseEntity.ok(new CursoResponseDTO(curso));
     }
 
     @PreAuthorize("hasRole('SECRETARIA')")
@@ -50,8 +50,8 @@ public class CursoController {
 
     @PreAuthorize("hasRole('SECRETARIA')")
     @GetMapping("/{id_secretaria}/secretaria")
-    public ResponseEntity<List<CursoDTO>> buscarCursosPorSecretaria(@PathVariable String id_secretaria) {
-        List<CursoDTO> cursos = this.cursoService.buscarCursoPorSecretaria(id_secretaria);
+    public ResponseEntity<List<CursoResponseDTO>> buscarCursosPorSecretaria(@PathVariable String id_secretaria) {
+        List<CursoResponseDTO> cursos = this.cursoService.buscarCursoPorSecretaria(id_secretaria);
         return ResponseEntity.ok(cursos);
     }
 

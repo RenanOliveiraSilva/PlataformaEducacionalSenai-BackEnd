@@ -4,6 +4,7 @@ import com.renan.ufem.domain.Curso;
 import com.renan.ufem.domain.Secretaria;
 import com.renan.ufem.dto.curso.CursoDTO;
 import com.renan.ufem.dto.curso.CursoEditarDTO;
+import com.renan.ufem.dto.curso.CursoResponseDTO;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
@@ -87,7 +88,7 @@ public class CursoServiceImp implements CursoService {
     }
 
     @Override
-    public List<CursoDTO> buscarCursoPorSecretaria(String id_secretaria) {
+    public List<CursoResponseDTO> buscarCursoPorSecretaria(String id_secretaria) {
         List<Curso> cursos = this.repository.findAllByIdSecretaria(id_secretaria);
 
         if (cursos.isEmpty()) {
@@ -95,7 +96,7 @@ public class CursoServiceImp implements CursoService {
         }
 
         return cursos.stream()
-                .map(CursoDTO::new)
+                .map(CursoResponseDTO::new)
                 .toList();
     }
 }
