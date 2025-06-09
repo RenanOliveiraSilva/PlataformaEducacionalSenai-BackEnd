@@ -25,7 +25,7 @@ public class SemestreController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.criarSemestre(dto));
     }
 
-    @PreAuthorize("hasRole('SECRETARIA')")
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
     @GetMapping("/grade/{idGrade}")
     public ResponseEntity<List<Semestre>> listarPorGrade(@PathVariable String idGrade) {
         return ResponseEntity.ok(service.listarPorGrade(idGrade));
