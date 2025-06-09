@@ -7,6 +7,9 @@ import com.renan.ufem.dto.aluno.AlunoUpdateDTO;
 import com.renan.ufem.dto.curso.CursoDTO;
 import com.renan.ufem.dto.professor.ProfessorDTO;
 import com.renan.ufem.dto.semestre.SemestreDTO;
+import com.renan.ufem.dto.semestreDisciplina.IdSemestreDisciplinaDTO;
+import com.renan.ufem.dto.semestreDisciplina.SemestreAlunoDTO;
+import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaDTO;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
@@ -151,19 +154,51 @@ public class AlunoServiceImp implements AlunoService {
     }
 
     @Override
-    public List<Semestre> buscarPeriodoAluno(String id_aluno) {
-        Aluno aluno = this.repository.findById(id_aluno)
+    public List<SemestreAlunoDTO> buscarPeriodoAluno(String idAluno) {
+        Aluno aluno = repository.findById(idAluno)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado."));
 
         String idGrade = aluno.getTurma().getGrade().getIdGrade();
 
-        List<Semestre> semestresAluno = this.semestreRepository.findAllByGrade_IdGrade(idGrade);
+        // usa o método que já faz JOIN FETCH
+        List<Semestre> semestres = semestreRepository
+                .findAllByGradeComDisciplinasEProfessores(idGrade);
 
-        if (semestresAluno.isEmpty()) {
+        if (semestres.isEmpty()) {
             throw new NotFoundException("Semestres não encontrados para a grade.");
         }
 
-        return semestresAluno;
+        // faz o map para DTOs
+        return semestres.stream()
+                .map(s -> {
+                    var listaSD = s.getSemestreDisciplinas().stream()
+                            .map(sd -> {
+                                // obtém nome da disciplina e do professor
+                                String nomeDisc = sd.getDisciplina().getNome();
+                                String nomeProf = sd.getProfessor().getNome();
+
+                                var idDto = new IdSemestreDisciplinaDTO(
+                                        s.getIdSemestre(),
+                                        nomeDisc,
+                                        nomeProf
+                                );
+                                return new SemestreDisciplinaDTO(
+                                        idDto,
+                                        sd.getDiaSemana(),
+                                        sd.getStatus()
+                                );
+                            })
+                            .toList();
+
+                    return new SemestreAlunoDTO(
+                            s.getIdSemestre(),
+                            s.getNumero(),
+                            s.getStatus(),
+                            listaSD
+                    );
+                })
+                .toList();
     }
+
 
 }

@@ -7,6 +7,7 @@ import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
 import com.renan.ufem.dto.aluno.AlunoUpdateDTO;
 import com.renan.ufem.dto.curso.CursoDTO;
 import com.renan.ufem.dto.semestre.SemestreDTO;
+import com.renan.ufem.dto.semestreDisciplina.SemestreAlunoDTO;
 
 import java.util.List;
 
@@ -17,5 +18,6 @@ public interface AlunoService {
     AlunoDTO alterarSituacaoAluno(String id_aluno);
     AlunoDTO buscarAluno(String id_aluno);
     CursoDTO buscarAlunoCurso(String id_aluno);
-    List<Semestre> buscarPeriodoAluno(String id_aluno);
+    List<SemestreAlunoDTO>  buscarPeriodoAluno(String id_aluno);
+
 }

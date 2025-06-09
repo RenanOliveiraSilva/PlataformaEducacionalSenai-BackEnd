@@ -7,6 +7,7 @@ import com.renan.ufem.dto.aluno.AlunoDTO;
 import com.renan.ufem.dto.aluno.AlunoLoginRequestDTO;
 import com.renan.ufem.dto.aluno.AlunoUpdateDTO;
 import com.renan.ufem.dto.curso.CursoDTO;
+import com.renan.ufem.dto.semestreDisciplina.SemestreAlunoDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.services.AlunoService;
 import jakarta.validation.Valid;
@@ -81,9 +82,9 @@ public class AlunoController {
 
     @PreAuthorize("hasRole('SECRETARIA') or hasRole('ALUNO')")
     @GetMapping("/{id_aluno}/semestres")
-    public ResponseEntity<List<Semestre>> buscarSemestresDoAluno(@PathVariable String id_aluno) {
-        List<Semestre> semestres = alunoService.buscarPeriodoAluno(id_aluno);
-        return ResponseEntity.ok(semestres);
+    public List<SemestreAlunoDTO>  buscarSemestresDoAluno(@PathVariable String id_aluno) {
+        List<SemestreAlunoDTO> semestres = alunoService.buscarPeriodoAluno(id_aluno);
+        return semestres;
     }
 
 }
