@@ -176,11 +176,13 @@ public class AlunoServiceImp implements AlunoService {
                                 // obtém nome da disciplina e do professor
                                 String nomeDisc = sd.getDisciplina().getNome();
                                 String nomeProf = sd.getProfessor().getNome();
+                                String cargaHor = sd.getDisciplina().getCargaHoraria().toString();
 
                                 var idDto = new IdSemestreDisciplinaDTO(
                                         s.getIdSemestre(),
                                         nomeDisc,
-                                        nomeProf
+                                        nomeProf,
+                                        cargaHor
                                 );
                                 return new SemestreDisciplinaDTO(
                                         idDto,
