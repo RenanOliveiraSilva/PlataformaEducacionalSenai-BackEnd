@@ -6,8 +6,10 @@ import com.renan.ufem.dto.professor.ProfessorDTO;
 import com.renan.ufem.dto.professor.ProfessorEditarDTO;
 import com.renan.ufem.dto.professor.ProfessorLoginRequestDTO;
 import com.renan.ufem.dto.professor.ProfessorResponseDTO;
+import com.renan.ufem.dto.turma.TurmaResponseDTO;
 import com.renan.ufem.infra.security.JwtTokenService;
 import com.renan.ufem.services.ProfessorService;
+import com.renan.ufem.services.SemestreDisciplinaService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,7 @@ public class ProfessorController {
 
     final private JwtTokenService tokenService;
     final private ProfessorService professorService;
+    private final SemestreDisciplinaService sdService;
 
     @PreAuthorize("hasRole('SECRETARIA') or hasRole('PROFESSOR')")
     @GetMapping("/{id_professor}")
@@ -77,5 +80,14 @@ public class ProfessorController {
     @GetMapping("/secretaria/{id_secretaria}")
     public ResponseEntity<List<ProfessorResponseDTO>> listarPorSecretaria(@PathVariable String id_secretaria) {
         return ResponseEntity.ok(professorService.buscarProfessorPorSecretaria(id_secretaria));
+    }
+
+    @PreAuthorize("hasRole('PROFESSOR')")
+    @GetMapping("/{idProfessor}/turmas")
+    public List<TurmaResponseDTO> getTurmas(
+            @PathVariable String idProfessor
+    ) {
+        return sdService
+                .getTurmasPorProfessor(idProfessor);
     }
 }

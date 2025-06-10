@@ -2,6 +2,7 @@ package com.renan.ufem.repositories;
 
 import com.renan.ufem.domain.SemestreDisciplina;
 import com.renan.ufem.domain.SemestreDisciplinaId;
+import com.renan.ufem.domain.Turma;
 import com.renan.ufem.enums.DiaSemana;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,6 +29,15 @@ public interface SemestreDisciplinaRepository extends JpaRepository<SemestreDisc
             @Param("idSemestre")   String idSemestre,
             @Param("idDisciplina") String idDisciplina,
             @Param("idProfessor")  String idProfessor
+    );
+
+    @Query("""
+      SELECT DISTINCT sd.semestre.grade.turma
+        FROM SemestreDisciplina sd
+       WHERE sd.professor.idProfessor = :idProfessor
+    """)
+    List<Turma> findTurmasByProfessor(
+            @Param("idProfessor") String idProfessor
     );
 
 }

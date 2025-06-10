@@ -2,7 +2,9 @@ package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.*;
 import com.renan.ufem.dto.semestreDisciplina.SemestreDisciplinaRequestDTO;
+import com.renan.ufem.dto.turma.TurmaResponseDTO;
 import com.renan.ufem.enums.StatusSemestre;
+import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.DisciplinaRepository;
 import com.renan.ufem.repositories.ProfessorRepository;
 import com.renan.ufem.repositories.SemestreDisciplinaRepository;
@@ -10,6 +12,8 @@ import com.renan.ufem.repositories.SemestreRepository;
 import com.renan.ufem.services.SemestreDisciplinaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +54,17 @@ public class SemestreDisciplinaServiceImp implements SemestreDisciplinaService {
         return repository.save(sd);
     }
 
+    @Override
+    public List<TurmaResponseDTO> getTurmasPorProfessor(String idProfessor) {
+        List<Turma> turmas = repository.findTurmasByProfessor(idProfessor);
+
+        if (turmas.isEmpty()) {
+            throw new NotFoundException("Nenhuma turma encontrada para este professor");
+        }
+
+        return turmas.stream()
+                .map(TurmaResponseDTO::new)
+                .toList();
+    }
 
 }
