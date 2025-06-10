@@ -77,6 +77,7 @@ public class AtividadeServiceImpl implements AtividadeService {
 
     private AtividadeResponseDTO toDTO(Atividade a) {
         return new AtividadeResponseDTO(
+                a.getIdAtividade(),
                 a.getNome(),
                 a.getDescricao(),
                 a.getDataEntrega(),

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 // DTO principal de Atividade (para resposta)
 public record AtividadeResponseDTO(
+        String idAtividade,
         String nome,
         String descricao,
         LocalDate dataEntrega,
