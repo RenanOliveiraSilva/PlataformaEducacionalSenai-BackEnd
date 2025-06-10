@@ -29,7 +29,7 @@ public class AtividadeController {
         return ResponseEntity.ok(newAtividade);
     }
 
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasRole('ALUNO')")
     @GetMapping("/aluno/{idAluno}")
     public List<AtividadeResponseDTO> getByAluno(@PathVariable String idAluno) {
         return this.service.buscarAtividadesPorAluno(idAluno);
