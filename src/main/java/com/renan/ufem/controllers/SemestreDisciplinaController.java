@@ -7,6 +7,7 @@ import com.renan.ufem.enums.DiaSemana;
 import com.renan.ufem.services.SemestreDisciplinaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +18,7 @@ public class SemestreDisciplinaController {
     private final SemestreDisciplinaService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('SECRETARIA')")
     public ResponseEntity<SemestreDisciplina> criarVinculo(
             @RequestParam String idSemestre,
             @RequestParam String idDisciplina,

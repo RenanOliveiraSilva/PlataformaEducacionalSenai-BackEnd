@@ -17,4 +17,17 @@ public interface SemestreDisciplinaRepository extends JpaRepository<SemestreDisc
             @Param("diaSemana") DiaSemana diaSemana
     );
 
+    @Query("""
+      SELECT sd
+        FROM SemestreDisciplina sd
+       WHERE sd.id.idSemestre   = :idSemestre
+         AND sd.id.idDisciplina = :idDisciplina
+         AND sd.id.idProfessor  = :idProfessor
+    """)
+    Optional<SemestreDisciplina> findByChaves(
+            @Param("idSemestre")   String idSemestre,
+            @Param("idDisciplina") String idDisciplina,
+            @Param("idProfessor")  String idProfessor
+    );
+
 }

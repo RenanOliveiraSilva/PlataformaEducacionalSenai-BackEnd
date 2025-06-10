@@ -17,7 +17,7 @@ import java.util.List;
 public class AtividadeController {
     private final AtividadeService service;
 
-    @PreAuthorize("hasRole('SECRETARIA')")
+    @PreAuthorize("hasRole('PROFESSOR')")
     @PostMapping("/{id_disciplina}/{id_turma}/{id_professor}")
     public ResponseEntity<AtividadeResponseDTO> criar(
             @RequestBody AtividadeCreateDTO atividade,
@@ -29,5 +29,9 @@ public class AtividadeController {
         return ResponseEntity.ok(newAtividade);
     }
 
-
+    @PreAuthorize("hasRole('PROFESSOR')")
+    @GetMapping("/aluno/{idAluno}")
+    public List<AtividadeResponseDTO> getByAluno(@PathVariable String idAluno) {
+        return this.service.buscarAtividadesPorAluno(idAluno);
+    }
 }

@@ -2,7 +2,6 @@ package com.renan.ufem.dto.atividade;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 // DTO principal de Atividade (para resposta)
 public record AtividadeResponseDTO(

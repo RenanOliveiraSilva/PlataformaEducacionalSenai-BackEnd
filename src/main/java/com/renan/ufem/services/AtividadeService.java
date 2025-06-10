@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface AtividadeService {
     AtividadeResponseDTO criarAtividade(String id_disciplina, String id_turma, String id_professor, AtividadeCreateDTO atividade);
+    List<AtividadeResponseDTO> buscarAtividadesPorAluno(String id_aluno);
 
 }

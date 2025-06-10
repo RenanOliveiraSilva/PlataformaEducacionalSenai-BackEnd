@@ -28,7 +28,13 @@ public class ProfessorServiceImp implements ProfessorService {
     public Professor criarProfessor(ProfessorDTO dto, String idSecretaria) {
         Optional<Professor> professorExiste = this.repository.findByCPF(dto.CPF());
 
+        Optional<Professor> ProfessorEmailExiste = this.repository.findByEmail(dto.email());
+
         if(professorExiste.isPresent()) {
+            throw new RuntimeException("Professor já cadastrado");
+        }
+
+        if(ProfessorEmailExiste.isPresent()) {
             throw new RuntimeException("Professor já cadastrado");
         }
 

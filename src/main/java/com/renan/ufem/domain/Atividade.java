@@ -9,10 +9,11 @@ import java.time.LocalDateTime;
 @Table(name = "atividade")
 @Data
 public class Atividade {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_atividade")
-    private Integer idAtividade;
+    private String idAtividade;
 
     private String nome;
     private String descricao;
