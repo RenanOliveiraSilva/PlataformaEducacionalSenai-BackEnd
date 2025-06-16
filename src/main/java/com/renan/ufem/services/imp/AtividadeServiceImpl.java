@@ -8,6 +8,8 @@ import com.renan.ufem.repositories.*;
 import com.renan.ufem.services.AtividadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,6 +21,7 @@ public class AtividadeServiceImpl implements AtividadeService {
     private final ProfessorRepository professorRepository;
     private final SemestreDisciplinaRepository sdRepository;
     private final AlunoRepository alunoRespository;
+    private final AtividadeAlunoRepository alunoAtividadeRepository;
 
     @Override
     public AtividadeResponseDTO criarAtividade(String id_disciplina, String id_turma, String id_professor, AtividadeCreateDTO dto) {
@@ -77,7 +80,25 @@ public class AtividadeServiceImpl implements AtividadeService {
                 .toList();
     }
 
+    @Override
+    public void concluirAtividade(
+            String idAluno,
+            String idAtividade
+    ) {
+        Aluno aluno = alunoRespository.findById(idAluno)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
+        Atividade atividade = atividadeRepository.findById(idAtividade)
+                .orElseThrow(() -> new NotFoundException("Atividade não encontrada"));
+
+        AtividadeAluno aa = new AtividadeAluno();
+        aa.setAluno(aluno);
+        aa.setAtividade(atividade);
+        aa.setStatus(AtividadeStatus.AGUARDANDO);
+        aa.setDataEntrega(LocalDate.now());
+
+        alunoAtividadeRepository.save(aa);
+    }
 
     private AtividadeResponseDTO toDTO(Atividade a) {
         return new AtividadeResponseDTO(

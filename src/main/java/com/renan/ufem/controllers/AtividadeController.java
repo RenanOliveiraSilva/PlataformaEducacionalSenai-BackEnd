@@ -3,6 +3,7 @@ package com.renan.ufem.controllers;
 import com.renan.ufem.domain.Atividade;
 import com.renan.ufem.dto.atividade.AtividadeCreateDTO;
 import com.renan.ufem.dto.atividade.AtividadeResponseDTO;
+import com.renan.ufem.dto.atividade.ConcluirAtividadeDTO;
 import com.renan.ufem.services.AtividadeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,16 @@ public class AtividadeController {
     ) {
         AtividadeResponseDTO newAtividade = this.service.criarAtividade(id_disciplina, id_turma, id_professor, atividade);
         return ResponseEntity.ok(newAtividade);
+    }
+
+    @PreAuthorize("hasRole('ALUNO')")
+    @PostMapping("/{idAtividade}/aluno/{idAluno}/concluir")
+    public ResponseEntity<Void> concluir(
+            @PathVariable String idAtividade,
+            @PathVariable String idAluno
+    ) {
+        service.concluirAtividade(idAluno, idAtividade);
+        return ResponseEntity.noContent().build();
     }
 
     @PreAuthorize("hasRole('ALUNO')")

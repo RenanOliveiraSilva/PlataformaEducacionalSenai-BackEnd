@@ -1,5 +1,7 @@
 package com.renan.ufem.domain;
 
+import com.renan.ufem.enums.AtividadeStatus;
+import com.renan.ufem.enums.StatusSemestre;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -24,7 +26,8 @@ public class AtividadeAluno {
 
     private Float nota;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private AtividadeStatus status;
 
     @Column(name = "data_entrega")
     private LocalDate dataEntrega;

@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AtividadeRepository extends JpaRepository<Atividade, Integer> {
+public interface AtividadeRepository extends JpaRepository<Atividade, String> {
     @Query("""
       SELECT a
         FROM Atividade a
