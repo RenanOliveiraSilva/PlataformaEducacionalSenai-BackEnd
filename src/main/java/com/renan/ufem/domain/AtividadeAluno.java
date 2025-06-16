@@ -8,10 +8,11 @@ import java.time.LocalDate;
 @Table(name = "atividadealuno")
 @Data
 public class AtividadeAluno {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_atividade_aluno")
-    private Integer idAtividadeAluno;
+    private String idAtividadeAluno;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_aluno")
@@ -22,6 +23,7 @@ public class AtividadeAluno {
     private Atividade atividade;
 
     private Float nota;
+
     private String status;
 
     @Column(name = "data_entrega")

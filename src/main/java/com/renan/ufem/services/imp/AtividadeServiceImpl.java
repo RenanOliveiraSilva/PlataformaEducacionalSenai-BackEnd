@@ -2,6 +2,7 @@ package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.*;
 import com.renan.ufem.dto.atividade.*;
+import com.renan.ufem.enums.AtividadeStatus;
 import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.*;
 import com.renan.ufem.services.AtividadeService;
@@ -47,6 +48,7 @@ public class AtividadeServiceImpl implements AtividadeService {
         atividade.setDisciplina(disciplina);
         atividade.setTurma(turma);
         atividade.setProfessor(professor);
+        atividade.setAtividadeStatus(AtividadeStatus.PENDENTE);
 
         // 3) Persiste
         Atividade salva = atividadeRepository.save(atividade);
@@ -75,23 +77,26 @@ public class AtividadeServiceImpl implements AtividadeService {
                 .toList();
     }
 
+
+
     private AtividadeResponseDTO toDTO(Atividade a) {
         return new AtividadeResponseDTO(
-                a.getIdAtividade(),
-                a.getNome(),
-                a.getDescricao(),
-                a.getDataEntrega(),
-                a.getPeso(),
+                        a.getIdAtividade(),
+                        a.getNome(),
+                        a.getDescricao(),
+                        a.getDataEntrega(),
+                        a.getPeso(),
                 a.getDataCadastro(),
                 new DisciplinaInfo(a.getDisciplina().getNome()),
                 new TurmaInfo(
-                        a.getTurma().getNome(),
-                        a.getTurma().getAno(),
-                        a.getTurma().getTurno().name(),
-                        a.getTurma().getSituacao().name()
-                ),
-                new ProfessorInfo(a.getProfessor().getNome())
-        );
+                                a.getTurma().getNome(),
+                                a.getTurma().getAno(),
+                                a.getTurma().getTurno().name(),
+                                a.getTurma().getSituacao().name()
+                        ),
+                new ProfessorInfo(a.getProfessor().getNome()),
+                a.getAtividadeStatus()
+                );
     }
 
 }

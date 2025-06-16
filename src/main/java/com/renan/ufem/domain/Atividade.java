@@ -1,5 +1,6 @@
 package com.renan.ufem.domain;
 
+import com.renan.ufem.enums.AtividadeStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
@@ -25,6 +26,10 @@ public class Atividade {
 
     @Column(name = "data_cadastro", nullable = false, updatable = false)
     private LocalDateTime dataCadastro = LocalDateTime.now();
+
+    @Column(name = "status_atividade")
+    @Enumerated(EnumType.STRING)
+    private AtividadeStatus atividadeStatus;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_disciplina")

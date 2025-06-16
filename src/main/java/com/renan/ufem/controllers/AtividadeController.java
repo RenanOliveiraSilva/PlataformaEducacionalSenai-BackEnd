@@ -17,7 +17,7 @@ import java.util.List;
 public class AtividadeController {
     private final AtividadeService service;
 
-    @PreAuthorize("hasRole('PROFESSOR')")
+    @PreAuthorize("hasRole('SECRETARIA') or hasRole('PROFESSOR')")
     @PostMapping("/{id_disciplina}/{id_turma}/{id_professor}")
     public ResponseEntity<AtividadeResponseDTO> criar(
             @RequestBody AtividadeCreateDTO atividade,

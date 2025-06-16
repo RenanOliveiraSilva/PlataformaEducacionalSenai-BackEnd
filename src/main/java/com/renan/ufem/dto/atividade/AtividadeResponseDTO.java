@@ -1,5 +1,7 @@
 package com.renan.ufem.dto.atividade;
 
+import com.renan.ufem.enums.AtividadeStatus;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,6 +15,7 @@ public record AtividadeResponseDTO(
         LocalDateTime dataCadastro,
         DisciplinaInfo disciplina,
         TurmaInfo turma,
-        ProfessorInfo professor
+        ProfessorInfo professor,
+        AtividadeStatus statusAtividade
 ) {}
 
