@@ -2,6 +2,7 @@ package com.renan.ufem.services;
 
 import com.renan.ufem.domain.Disciplina;
 import com.renan.ufem.dto.disciplina.DisciplinaDTO;
+import com.renan.ufem.dto.disciplina.DisciplinaProfessorDTO;
 import com.renan.ufem.dto.disciplina.DisciplinaResponseDTO;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface DisciplinaService {
     DisciplinaResponseDTO buscarPorId(String idDisciplina);
     List<DisciplinaResponseDTO> buscarPorSecretaria(String idSecretaria);
     DisciplinaResponseDTO alterarSituacao(String idDisciplina);
+    List<DisciplinaProfessorDTO> buscarDisciplinasPorTurmaEProfessor(String idTurma, String idProfessor);
 }

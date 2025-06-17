@@ -2,11 +2,13 @@ package com.renan.ufem.services.imp;
 
 import com.renan.ufem.domain.Disciplina;
 import com.renan.ufem.dto.disciplina.DisciplinaDTO;
+import com.renan.ufem.dto.disciplina.DisciplinaProfessorDTO;
 import com.renan.ufem.dto.disciplina.DisciplinaResponseDTO;
 import com.renan.ufem.enums.SituacaoType;
 import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.DisciplinaRepository;
+import com.renan.ufem.repositories.SemestreDisciplinaRepository;
 import com.renan.ufem.services.DisciplinaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class DisciplinaServiceImp implements DisciplinaService {
 
     private final DisciplinaRepository repository;
+    private final SemestreDisciplinaRepository semestreDisciplinaRepository;
 
     @Override
     public DisciplinaResponseDTO criar(String idSecretaria, DisciplinaDTO body) {
@@ -70,5 +73,10 @@ public class DisciplinaServiceImp implements DisciplinaService {
         d.setSituacao(d.getSituacao() == SituacaoType.ATIVO ? SituacaoType.INATIVO : SituacaoType.ATIVO);
         d.setData_alteracao(LocalDate.now());
         return new DisciplinaResponseDTO(repository.save(d));
+    }
+
+    @Override
+    public List<DisciplinaProfessorDTO> buscarDisciplinasPorTurmaEProfessor(String idTurma, String idProfessor) {
+        return semestreDisciplinaRepository.findDisciplinasByTurmaAndProfessor(idTurma, idProfessor);
     }
 }

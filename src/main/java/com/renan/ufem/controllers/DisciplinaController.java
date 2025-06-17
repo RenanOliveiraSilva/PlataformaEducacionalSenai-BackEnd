@@ -1,6 +1,7 @@
 package com.renan.ufem.controllers;
 
 import com.renan.ufem.dto.disciplina.DisciplinaDTO;
+import com.renan.ufem.dto.disciplina.DisciplinaProfessorDTO;
 import com.renan.ufem.dto.disciplina.DisciplinaResponseDTO;
 import com.renan.ufem.services.DisciplinaService;
 import lombok.RequiredArgsConstructor;
@@ -45,5 +46,15 @@ public class DisciplinaController {
     @DeleteMapping("/{id_disciplina}/situacao")
     public ResponseEntity<DisciplinaResponseDTO> alterarSituacaoDisciplina(@PathVariable String id_disciplina) {
         return ResponseEntity.ok(service.alterarSituacao(id_disciplina));
+    }
+
+    @PreAuthorize("hasRole('PROFESSOR')")
+    @GetMapping("/professor/{id_turma}/{id_professor}")
+    public ResponseEntity<List<DisciplinaProfessorDTO>> listarDisciplinasPorProfessorETurma(
+            @PathVariable String id_turma,
+            @PathVariable String id_professor
+    ) {
+        List<DisciplinaProfessorDTO> disciplinas = service.buscarDisciplinasPorTurmaEProfessor(id_turma, id_professor);
+        return ResponseEntity.ok(disciplinas);
     }
 }

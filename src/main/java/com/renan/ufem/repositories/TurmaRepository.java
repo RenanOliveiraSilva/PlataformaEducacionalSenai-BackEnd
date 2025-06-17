@@ -11,5 +11,4 @@ public interface TurmaRepository extends JpaRepository<Turma, String> {
     boolean existsByNomeAndAnoAndIdSecretaria(String nome, String ano, String idSecretaria);
     List<Turma> findAllByIdSecretaria(String idSecretaria);
 
-
 }
