@@ -3,6 +3,7 @@ package com.renan.ufem.services.imp;
 import com.renan.ufem.domain.*;
 import com.renan.ufem.dto.atividade.*;
 import com.renan.ufem.enums.AtividadeStatus;
+import com.renan.ufem.exceptions.ConflictException;
 import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.repositories.*;
 import com.renan.ufem.services.AtividadeService;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,37 +64,46 @@ public class AtividadeServiceImpl implements AtividadeService {
 
     @Override
     public List<AtividadeResponseDTO> buscarAtividadesPorAluno(String idAluno) {
-        // 1) Verifica se o aluno existe
-        Aluno aluno = this.alunoRespository.findById(idAluno)
+        Aluno aluno = alunoRespository.findById(idAluno)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
-        // 2) Pega o id da turma do aluno
         String idTurma = aluno.getTurma().getIdTurma();
 
-        // 3) Busca as atividades dessa turma
         List<Atividade> atividades = atividadeRepository.buscarAtividadesPorAluno(idTurma);
         if (atividades.isEmpty()) {
             throw new NotFoundException("Nenhuma atividade encontrada para este aluno");
         }
 
-        // 4) Converte para DTO e retorna
+        // Busca os status da tabela atividadeAluno
+        List<AtividadeAluno> atividadesAluno = alunoAtividadeRepository.findByAluno_IdAluno(idAluno);
+
+        // Cria um mapa idAtividade -> statusAluno
+        Map<String, String> statusPorAtividade = atividadesAluno.stream()
+                .collect(Collectors.toMap(
+                        aa -> aa.getAtividade().getIdAtividade(),
+                        aa -> aa.getStatus().name()  // ou .toString() se preferir
+                ));
+
+        // Converte para DTO usando status condicional
         return atividades.stream()
-                .map(this::toDTO)
+                .map(atividade -> toDTOComStatusAluno(atividade, statusPorAtividade))
                 .toList();
     }
 
+
     @Override
-    public void concluirAtividade(
-            String idAluno,
-            String idAtividade
-    ) {
+    public void concluirAtividade(String idAluno, String idAtividade) {
         Aluno aluno = alunoRespository.findById(idAluno)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
         Atividade atividade = atividadeRepository.findById(idAtividade)
                 .orElseThrow(() -> new NotFoundException("Atividade não encontrada"));
 
+        boolean jaConcluiu = alunoAtividadeRepository.existsByAlunoAndAtividade(aluno, atividade);
 
+        if (jaConcluiu) {
+            throw new ConflictException("Esta atividade já foi concluída por este aluno.");
+        }
 
         AtividadeAluno aa = new AtividadeAluno();
         aa.setAluno(aluno);
@@ -121,5 +133,31 @@ public class AtividadeServiceImpl implements AtividadeService {
                 a.getAtividadeStatus()
                 );
     }
+
+    private AtividadeResponseDTO toDTOComStatusAluno(Atividade a, Map<String, String> statusPorAtividade) {
+        AtividadeStatus statusFinal = AtividadeStatus.valueOf(
+                statusPorAtividade.getOrDefault(a.getIdAtividade(), a.getAtividadeStatus().name())
+        );
+
+        return new AtividadeResponseDTO(
+                a.getIdAtividade(),
+                a.getNome(),
+                a.getDescricao(),
+                a.getDataEntrega(),
+                a.getPeso(),
+                a.getDataCadastro(),
+                new DisciplinaInfo(a.getDisciplina().getNome()),
+                new TurmaInfo(
+                        a.getTurma().getNome(),
+                        a.getTurma().getAno(),
+                        a.getTurma().getTurno().name(),
+                        a.getTurma().getSituacao().name()
+                ),
+                new ProfessorInfo(a.getProfessor().getNome()),
+                statusFinal
+        );
+    }
+
+
 
 }
