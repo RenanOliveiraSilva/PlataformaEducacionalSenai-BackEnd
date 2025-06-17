@@ -36,4 +36,11 @@ public class TurmaController {
         return ResponseEntity.ok(turma);
     }
 
+    @PreAuthorize("hasRole('SECRETARIA')")
+    @GetMapping("/listarPorSecretaria/{id_secretaria}")
+    public ResponseEntity<?> listarTurmasPorSecretaria(@PathVariable String id_secretaria) {
+        return ResponseEntity.ok(turmaService.listarTurmasPorSecretaria(id_secretaria));
+    }
+
+
 }

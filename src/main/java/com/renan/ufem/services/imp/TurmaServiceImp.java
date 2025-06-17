@@ -13,6 +13,8 @@ import com.renan.ufem.services.TurmaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TurmaServiceImp implements TurmaService {
@@ -59,4 +61,18 @@ public class TurmaServiceImp implements TurmaService {
 
         return new TurmaResponseDTO(turma);
     }
+
+    @Override
+    public List<TurmaResponseDTO> listarTurmasPorSecretaria(String idSecretaria) {
+        List<Turma> turmas = repository.findAllByIdSecretaria(idSecretaria);
+
+        if (turmas.isEmpty()) {
+            throw new NotFoundException("Nenhuma turma encontrada para a secretaria informada.");
+        }
+
+        return turmas.stream()
+                .map(TurmaResponseDTO::new)
+                .toList();
+    }
+
 }

@@ -91,6 +91,8 @@ public class AtividadeServiceImpl implements AtividadeService {
         Atividade atividade = atividadeRepository.findById(idAtividade)
                 .orElseThrow(() -> new NotFoundException("Atividade não encontrada"));
 
+
+
         AtividadeAluno aa = new AtividadeAluno();
         aa.setAluno(aluno);
         aa.setAtividade(atividade);
