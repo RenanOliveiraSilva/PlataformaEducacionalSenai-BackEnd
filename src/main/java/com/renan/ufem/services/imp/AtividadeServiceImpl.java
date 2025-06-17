@@ -77,16 +77,23 @@ public class AtividadeServiceImpl implements AtividadeService {
         // Busca os status da tabela atividadeAluno
         List<AtividadeAluno> atividadesAluno = alunoAtividadeRepository.findByAluno_IdAluno(idAluno);
 
-        // Cria um mapa idAtividade -> statusAluno
+        // Map de status
         Map<String, String> statusPorAtividade = atividadesAluno.stream()
                 .collect(Collectors.toMap(
                         aa -> aa.getAtividade().getIdAtividade(),
-                        aa -> aa.getStatus().name()  // ou .toString() se preferir
+                        aa -> aa.getStatus().name()
                 ));
 
-        // Converte para DTO usando status condicional
+        // Map de notas
+        Map<String, Float> notaPorAtividade = atividadesAluno.stream()
+                .collect(Collectors.toMap(
+                        aa -> aa.getAtividade().getIdAtividade(),
+                        AtividadeAluno::getNota,
+                        (n1, n2) -> n1 // resolve duplicata mantendo a primeira
+                ));
+
         return atividades.stream()
-                .map(atividade -> toDTOComStatusAluno(atividade, statusPorAtividade))
+                .map(atividade -> toDTOComStatusAluno(atividade, statusPorAtividade, notaPorAtividade))
                 .toList();
     }
 
@@ -142,13 +149,20 @@ public class AtividadeServiceImpl implements AtividadeService {
                         ),
                 new ProfessorInfo(a.getProfessor().getNome()),
                 a.getAtividadeStatus()
+
                 );
     }
 
-    private AtividadeResponseDTO toDTOComStatusAluno(Atividade a, Map<String, String> statusPorAtividade) {
+    private AtividadeResponseDTO toDTOComStatusAluno(
+            Atividade a,
+            Map<String, String> statusPorAtividade,
+            Map<String, Float> notaPorAtividade
+    ) {
         AtividadeStatus statusFinal = AtividadeStatus.valueOf(
                 statusPorAtividade.getOrDefault(a.getIdAtividade(), a.getAtividadeStatus().name())
         );
+
+        Float notaFinal = notaPorAtividade.get(a.getIdAtividade());
 
         return new AtividadeResponseDTO(
                 a.getIdAtividade(),
@@ -166,8 +180,10 @@ public class AtividadeServiceImpl implements AtividadeService {
                 ),
                 new ProfessorInfo(a.getProfessor().getNome()),
                 statusFinal
+                // 👈 incluído aqui
         );
     }
+
 
 
 
