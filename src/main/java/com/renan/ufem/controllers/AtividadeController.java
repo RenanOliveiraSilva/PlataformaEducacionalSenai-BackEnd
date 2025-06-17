@@ -3,8 +3,10 @@ package com.renan.ufem.controllers;
 import com.renan.ufem.domain.Atividade;
 import com.renan.ufem.dto.atividade.AtividadeCreateDTO;
 import com.renan.ufem.dto.atividade.AtividadeResponseDTO;
+import com.renan.ufem.dto.atividade.AvaliacaoDTO;
 import com.renan.ufem.dto.atividade.ConcluirAtividadeDTO;
 import com.renan.ufem.services.AtividadeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -45,4 +47,16 @@ public class AtividadeController {
     public List<AtividadeResponseDTO> getByAluno(@PathVariable String idAluno) {
         return this.service.buscarAtividadesPorAluno(idAluno);
     }
+
+    @PatchMapping("/avaliar/{idAtividade}/{idAluno}")
+    @PreAuthorize("hasRole('PROFESSOR')")
+    public ResponseEntity<Void> avaliarAtividade(
+            @PathVariable String idAtividade,
+            @PathVariable String idAluno,
+            @RequestBody @Valid AvaliacaoDTO dto
+    ) {
+        service.avaliarAtividade(idAtividade, idAluno, dto.nota());
+        return ResponseEntity.noContent().build();
+    }
+
 }

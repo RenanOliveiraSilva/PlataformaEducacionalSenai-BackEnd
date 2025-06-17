@@ -114,6 +114,17 @@ public class AtividadeServiceImpl implements AtividadeService {
         alunoAtividadeRepository.save(aa);
     }
 
+    public void avaliarAtividade(String idAtividade, String idAluno, Float nota) {
+        AtividadeAluno aa = alunoAtividadeRepository.findByAluno_IdAlunoAndAtividade_IdAtividade(idAluno, idAtividade)
+                .orElseThrow(() -> new NotFoundException("Entrega de atividade não encontrada"));
+
+        aa.setNota(nota);
+        aa.setStatus(AtividadeStatus.CONCLUIDO); // ou outro status, se tiver
+
+        alunoAtividadeRepository.save(aa);
+    }
+
+
     private AtividadeResponseDTO toDTO(Atividade a) {
         return new AtividadeResponseDTO(
                         a.getIdAtividade(),
