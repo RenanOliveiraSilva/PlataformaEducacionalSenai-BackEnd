@@ -12,6 +12,7 @@ public interface AtividadeAlunoRepository extends JpaRepository<AtividadeAluno, 
     List<AtividadeAluno> findByAluno_IdAluno(String idAluno);
     boolean existsByAlunoAndAtividade(Aluno aluno, Atividade atividade);
     Optional<AtividadeAluno> findByAluno_IdAlunoAndAtividade_IdAtividade(String idAluno, String idAtividade);
+    Optional<AtividadeAluno> findByAlunoAndAtividade(Aluno aluno, Atividade atividade);
 
 
 }

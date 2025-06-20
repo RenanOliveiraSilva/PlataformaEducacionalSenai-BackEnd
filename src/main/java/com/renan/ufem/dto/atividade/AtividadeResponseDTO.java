@@ -5,7 +5,6 @@ import com.renan.ufem.enums.AtividadeStatus;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-// DTO principal de Atividade (para resposta)
 public record AtividadeResponseDTO(
         String idAtividade,
         String nome,
@@ -18,4 +17,3 @@ public record AtividadeResponseDTO(
         ProfessorInfo professor,
         AtividadeStatus statusAtividade
 ) {}
-

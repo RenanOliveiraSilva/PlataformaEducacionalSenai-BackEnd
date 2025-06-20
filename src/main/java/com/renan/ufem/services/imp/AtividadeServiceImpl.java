@@ -43,7 +43,7 @@ public class AtividadeServiceImpl implements AtividadeService {
         Semestre semestre = turma.getGrade().getSemestres().getLast();
 
         SemestreDisciplina exist = sdRepository.findByChaves(semestre.getIdSemestre(), id_disciplina, id_professor)
-                                               .orElseThrow(() -> new NotFoundException("Disciplina nesse semestre com esse professor não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Disciplina nesse semestre com esse professor não encontrado"));
 
         // 2) Monta a entidade Atividade
         Atividade atividade = new Atividade();
@@ -62,7 +62,6 @@ public class AtividadeServiceImpl implements AtividadeService {
         return toDTO(salva);
     }
 
-    @Override
     public List<AtividadeResponseDTO> buscarAtividadesPorAluno(String idAluno) {
         Aluno aluno = alunoRespository.findById(idAluno)
                 .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
@@ -77,26 +76,18 @@ public class AtividadeServiceImpl implements AtividadeService {
         // Busca os status da tabela atividadeAluno
         List<AtividadeAluno> atividadesAluno = alunoAtividadeRepository.findByAluno_IdAluno(idAluno);
 
-        // Map de status
+        // Cria um mapa idAtividade -> statusAluno
         Map<String, String> statusPorAtividade = atividadesAluno.stream()
                 .collect(Collectors.toMap(
                         aa -> aa.getAtividade().getIdAtividade(),
-                        aa -> aa.getStatus().name()
+                        aa -> aa.getStatus().name()  // ou .toString() se preferir
                 ));
 
-        // Map de notas
-        Map<String, Float> notaPorAtividade = atividadesAluno.stream()
-                .collect(Collectors.toMap(
-                        aa -> aa.getAtividade().getIdAtividade(),
-                        AtividadeAluno::getNota,
-                        (n1, n2) -> n1 // resolve duplicata mantendo a primeira
-                ));
-
+        // Converte para DTO usando status condicional
         return atividades.stream()
-                .map(atividade -> toDTOComStatusAluno(atividade, statusPorAtividade, notaPorAtividade))
+                .map(atividade -> toDTOComStatusAluno(atividade, statusPorAtividade))
                 .toList();
     }
-
 
     @Override
     public void concluirAtividade(String idAluno, String idAtividade) {
@@ -131,38 +122,28 @@ public class AtividadeServiceImpl implements AtividadeService {
         alunoAtividadeRepository.save(aa);
     }
 
+    @Override
+    public Float consultarNotaAtividade(String idAluno, String idAtividade) {
+        Aluno aluno = alunoRespository.findById(idAluno)
+                .orElseThrow(() -> new NotFoundException("Aluno não encontrado"));
 
-    private AtividadeResponseDTO toDTO(Atividade a) {
-        return new AtividadeResponseDTO(
-                        a.getIdAtividade(),
-                        a.getNome(),
-                        a.getDescricao(),
-                        a.getDataEntrega(),
-                        a.getPeso(),
-                a.getDataCadastro(),
-                new DisciplinaInfo(a.getDisciplina().getNome()),
-                new TurmaInfo(
-                                a.getTurma().getNome(),
-                                a.getTurma().getAno(),
-                                a.getTurma().getTurno().name(),
-                                a.getTurma().getSituacao().name()
-                        ),
-                new ProfessorInfo(a.getProfessor().getNome()),
-                a.getAtividadeStatus()
+        Atividade atividade = atividadeRepository.findById(idAtividade)
+                .orElseThrow(() -> new NotFoundException("Atividade não encontrada"));
 
-                );
+        AtividadeAluno relacao = alunoAtividadeRepository.findByAlunoAndAtividade(aluno, atividade)
+                .orElseThrow(() -> new NotFoundException("Entrega de atividade não encontrada para este aluno"));
+
+        if (relacao.getNota() == null) {
+            throw new NotFoundException("Nota ainda não atribuída para esta atividade");
+        }
+
+        return relacao.getNota();
     }
 
-    private AtividadeResponseDTO toDTOComStatusAluno(
-            Atividade a,
-            Map<String, String> statusPorAtividade,
-            Map<String, Float> notaPorAtividade
-    ) {
+    private AtividadeResponseDTO toDTOComStatusAluno(Atividade a, Map<String, String> statusPorAtividade) {
         AtividadeStatus statusFinal = AtividadeStatus.valueOf(
                 statusPorAtividade.getOrDefault(a.getIdAtividade(), a.getAtividadeStatus().name())
         );
-
-        Float notaFinal = notaPorAtividade.get(a.getIdAtividade());
 
         return new AtividadeResponseDTO(
                 a.getIdAtividade(),
@@ -180,11 +161,27 @@ public class AtividadeServiceImpl implements AtividadeService {
                 ),
                 new ProfessorInfo(a.getProfessor().getNome()),
                 statusFinal
-                // 👈 incluído aqui
         );
     }
 
-
-
+    private AtividadeResponseDTO toDTO(Atividade a) {
+        return new AtividadeResponseDTO(
+                a.getIdAtividade(),
+                a.getNome(),
+                a.getDescricao(),
+                a.getDataEntrega(),
+                a.getPeso(),
+                a.getDataCadastro(),
+                new DisciplinaInfo(a.getDisciplina().getNome()),
+                new TurmaInfo(
+                        a.getTurma().getNome(),
+                        a.getTurma().getAno(),
+                        a.getTurma().getTurno().name(),
+                        a.getTurma().getSituacao().name()
+                ),
+                new ProfessorInfo(a.getProfessor().getNome()),
+                a.getAtividadeStatus()
+        );
+    }
 
 }

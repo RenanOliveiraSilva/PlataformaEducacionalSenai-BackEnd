@@ -24,6 +24,7 @@ public class AtividadeAluno {
     @JoinColumn(name = "id_atividade")
     private Atividade atividade;
 
+    @Column(name = "nota", nullable = true)
     private Float nota;
 
     @Enumerated(EnumType.STRING)

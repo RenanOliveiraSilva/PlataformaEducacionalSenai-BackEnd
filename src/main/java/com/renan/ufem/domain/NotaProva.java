@@ -1,28 +1,28 @@
 package com.renan.ufem.domain;
 
+import com.renan.ufem.enums.AtividadeStatus;
 import jakarta.persistence.*;
 import lombok.Data;
-import java.time.LocalDate;
 
 @Entity
-@Table(name = "notaprova")
+@Table(name = "notasprova")
 @Data
 public class NotaProva {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id_nota_prova")
-    private Integer idNotaProva;
+    private String idNotaProva;
 
     private Float nota;
 
-    @Column(name = "status_prova")
-    private String statusProva;
+    @Enumerated(EnumType.STRING)
+    private AtividadeStatus statusProva;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_prova")
     private Prova prova;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "id_aluno")
     private Aluno aluno;
 }

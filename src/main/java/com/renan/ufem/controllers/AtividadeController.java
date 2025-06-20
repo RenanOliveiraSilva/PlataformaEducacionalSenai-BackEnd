@@ -1,10 +1,12 @@
 package com.renan.ufem.controllers;
 
+import com.renan.ufem.domain.Aluno;
 import com.renan.ufem.domain.Atividade;
 import com.renan.ufem.dto.atividade.AtividadeCreateDTO;
 import com.renan.ufem.dto.atividade.AtividadeResponseDTO;
 import com.renan.ufem.dto.atividade.AvaliacaoDTO;
 import com.renan.ufem.dto.atividade.ConcluirAtividadeDTO;
+import com.renan.ufem.exceptions.NotFoundException;
 import com.renan.ufem.services.AtividadeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AtividadeController {
     private final AtividadeService service;
+
 
     @PreAuthorize("hasRole('SECRETARIA') or hasRole('PROFESSOR')")
     @PostMapping("/{id_disciplina}/{id_turma}/{id_professor}")
@@ -58,5 +61,16 @@ public class AtividadeController {
         service.avaliarAtividade(idAtividade, idAluno, dto.nota());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/nota/{idAluno}/{idAtividade}")
+    @PreAuthorize("hasRole('ALUNO')")
+    public ResponseEntity<Float> consultarNota(
+            @PathVariable String idAluno,
+            @PathVariable String idAtividade
+    ) {
+        Float nota = service.consultarNotaAtividade(idAluno, idAtividade);
+        return ResponseEntity.ok(nota);
+    }
+
 
 }

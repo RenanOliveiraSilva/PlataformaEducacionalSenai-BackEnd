@@ -11,6 +11,8 @@ public interface AtividadeService {
     List<AtividadeResponseDTO> buscarAtividadesPorAluno(String id_aluno);
     void concluirAtividade(String idAluno, String idAtividade);
     void avaliarAtividade(String idAtividade, String idAluno, Float nota);
+    Float consultarNotaAtividade(String idAluno, String idAtividade);
+
 
 
 }
